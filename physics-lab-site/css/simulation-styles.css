@@ -1,0 +1,55 @@
+/* css/simulation-styles.css */
+@charset "UTF-8"; 
+
+.simulation-area {
+    display: flex;
+    flex-direction: row-reverse; 
+    gap: 30px;
+    margin-top: 30px;
+    align-items: flex-start; 
+}
+.controls {
+    flex: 1;
+    min-width: 300px;
+    max-width: 400px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+.controls label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+}
+.controls input[type="range"] {
+    width: 100%;
+    margin-top: 5px;
+}
+.canvas-display {
+    flex: 2;
+    min-width: 550px; 
+    min-height: 400px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #ffffff; 
+    overflow: hidden; 
+}
+.data-output {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #dee2e6;
+}
+.data-output div {
+    padding: 5px 0;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.1em;
+}
+.data-output span {
+    font-weight: bold;
+    color: #dc3545;
+}

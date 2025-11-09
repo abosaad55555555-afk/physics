@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>„Õ«ﬂÌ «·„ﬁ–Ê›« </title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/simulation-styles.css">
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">? «·⁄Êœ… ≈·Ï ﬁ«∆„… «·›’Ê·</a>
+        <h2>?? „Õ«ﬂÌ «·„ﬁ–Ê›«  («·›’· 6)</h2>
+
+        <div class="simulation-area">
+            <div class="controls">
+                <h3>??? «· Õﬂ„ ›Ì «·≈ÿ·«ﬁ:</h3>
+                
+                <label for="initial-velocity">«·”—⁄… «·«» œ«∆Ì… ($v_0$): <span id="vel-value">50</span> „/À</label>
+                <input type="range" id="initial-velocity" min="10" max="100" value="50">
+
+                <label for="launch-angle">“«ÊÌ… «·≈ÿ·«ﬁ (&theta;): <span id="angle-value">45</span> ∞</label>
+                <input type="range" id="launch-angle" min="0" max="90" value="45">
+                
+                <button id="runButton">≈ÿ·«ﬁ «·„ﬁ–Ê›</button>
+
+                <h3 style="margin-top: 30px;">?? «·»Ì«‰«  «·‰« Ã…:</h3>
+                <div class="data-output">
+                    <div>√ﬁ’Ï «— ›«⁄ ($Y_{max}$): <span id="ymax">0.00</span> „ —</div>
+                    <div>«·„œÏ «·√›ﬁÌ ($X_{max}$): <span id="xmax">0.00</span> „ —</div>
+                    <div>“„‰ «· Õ·Ìﬁ ($t_{flight}$): <span id="tflight">0.00</span> À«‰Ì…</div>
+                </div>
+            </div>
+            
+            <div class="canvas-display">
+                <canvas id="projectileCanvas" width="750" height="400"></canvas>
+            </div>
+        </div>
+    </div>
+    <script src="../js/projectile.js"></script> 
+</body>
+</html>

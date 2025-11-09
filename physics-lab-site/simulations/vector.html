@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محاكي المتجهات</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/simulation-styles.css">
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">← العودة إلى قائمة الفصول</a>
+        <h2>➕ محاكي جمع المتجهات (الفصل 1 و 5)</h2>
+        <div class="simulation-area">
+            <div class="controls">
+                <h3>🕹️ المتجه A (&vec;A;):</h3>
+                <label for="magA">المقدار ($A$): <span id="magA-val">50</span></label>
+                <input type="range" id="magA" min="10" max="100" value="50" step="5">
+                <label for="angleA">الزاوية (&theta;<sub>A</sub>): <span id="angleA-val">45</span>°</label>
+                <input type="range" id="angleA" min="0" max="360" value="45" step="5">
+
+                <h3>🕹️ المتجه B (&vec;B;):</h3>
+                <label for="magB">المقدار ($B$): <span id="magB-val">30</span></label>
+                <input type="range" id="magB" min="10" max="100" value="30" step="5">
+                <label for="angleB">الزاوية (&theta;<sub>B</sub>): <span id="angleB-val">315</span>°</label>
+                <input type="range" id="angleB" min="0" max="360" value="315" step="5">
+
+                <button id="calculateButton">حساب ورسم المحصلة</button>
+
+                <h3 style="margin-top: 30px;">📊 المتجه المحصل (&vec;R;):</h3>
+                <div class="data-output">
+                    <div>المقدار ($R$): <span id="magR">0.00</span></div>
+                    <div>الزاوية (&theta;<sub>R</sub>): <span id="angleR">0.00</span>°</div>
+                </div>
+            </div>
+            <div class="canvas-display">
+                <canvas id="vectorCanvas" width="550" height="550"></canvas>
+            </div>
+        </div>
+    </div>
+    <script src="../js/vector.js"></script> 
+</body>
+</html>

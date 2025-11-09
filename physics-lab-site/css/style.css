@@ -1,0 +1,101 @@
+/* css/style.css */
+@charset "UTF-8"; 
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    direction: rtl; 
+    text-align: right; 
+    line-height: 1.6;
+}
+.container {
+    max-width: 1200px;
+    margin: 40px auto;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+header {
+    text-align: center;
+    padding-bottom: 25px;
+    border-bottom: 3px solid #007bff;
+    margin-bottom: 30px;
+}
+header h1 {
+    color: #007bff;
+    font-size: 2.5em;
+    margin: 0;
+}
+.chapter-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+}
+.chapter-card {
+    display: block;
+    background-color: #ffffff;
+    border-right: 5px solid #28a745; 
+    border-radius: 8px;
+    padding: 20px;
+    text-decoration: none;
+    color: #333;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.chapter-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+.chapter-card h2 {
+    color: #28a745;
+    margin-top: 0;
+    font-size: 1.4em;
+}
+.chapter-card.coming-soon {
+    background-color: #e9ecef;
+    opacity: 0.7;
+    pointer-events: none; 
+    position: relative;
+    border-right: 5px solid #6c757d;
+}
+.chapter-card.coming-soon h2 {
+    color: #6c757d;
+}
+.chapter-card.coming-soon::after {
+    content: "قريباً";
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: #6c757d;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 0.9em;
+    transform: rotate(5deg);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+.back-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    width: 100%;
+    transition: background-color 0.2s;
+}
+button:hover {
+    background-color: #0056b3;
+}
