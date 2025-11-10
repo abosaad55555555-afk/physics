@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محاكي المقذوفات</title>
+    <link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">← العودة إلى قائمة الفصول</a>
+        <h2>🎯 محاكي المقذوفات (الفصل 6)</h2>
+
+        <div class="simulation-area">
+            <div class="controls">
+                <h3>🕹️ التحكم في الإطلاق:</h3>
+                
+                <label for="initial-velocity">السرعة الابتدائية ($v_0$): <span id="vel-value">50</span> م/ث</label>
+                <input type="range" id="initial-velocity" min="10" max="100" value="50">
+
+                <label for="launch-angle">زاوية الإطلاق (&theta;): <span id="angle-value">45</span> °</label>
+                <input type="range" id="launch-angle" min="0" max="90" value="45">
+                
+                <button id="updateButton" class="main-button">إطلاق المقذوف</button>
+
+                <h3 style="margin-top: 30px;">📊 البيانات الناتجة:</h3>
+                <div class="data-output">
+                    <div>أقصى ارتفاع ($Y_{max}$): <span id="ymax">0.00</span> متر</div>
+                    <div>المدى الأفقي ($X_{max}$): <span id="xmax">0.00</span> متر</div>
+                    <div>زمن التحليق ($t_{flight}$): <span id="tflight">0.00</span> ثانية</div>
+                </div>
+            </div>
+            
+            <div class="canvas-display">
+                <canvas id="projectileCanvas" width="750" height="400"></canvas>
+            </div>
+        </div>
+    </div>
+    <script src="../js/app.js"></script> 
+</body>
+</html>

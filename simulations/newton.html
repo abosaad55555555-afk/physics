@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محاكي قوانين نيوتن</title>
+    <link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">← العودة إلى قائمة الفصول</a>
+        <h2>⚖️ محاكي قوانين نيوتن (الجسم الحر)</h2>
+
+        <div class="simulation-area">
+            
+            <div class="controls">
+                <h3>🕹️ التحكم في النظام:</h3>
+                
+                <label for="mass-input">كتلة الجسم ($m$): <span id="mass-value">10</span> كجم</label>
+                <input type="range" id="mass-input" min="1" max="50" value="10" step="1">
+
+                <label for="applied-force-input">القوة المطبقة ($F_{app}$): <span id="force-value">50</span> نيوتن</label>
+                <input type="range" id="applied-force-input" min="0" max="200" value="50" step="5">
+                
+                <label for="mu-k-input">معامل الاحتكاك الحركي (&mu;<sub>k</sub>): <span id="muk-value">0.30</span></label>
+                <input type="range" id="mu-k-input" min="0" max="1" value="0.3" step="0.05">
+                
+                <button id="updateButton" class="main-button">تحديث ورسم القوى</button>
+                
+                <h3 style="margin-top: 30px;">📊 النتائج المحسوبة:</h3>
+                <div class="data-output">
+                    <div>قوة الاحتكاك ($F_f$): <span id="friction-force">0.00</span> نيوتن</div>
+                    <div>القوة المحصلة ($F_{net}$): <span id="net-force">0.00</span> نيوتن</div>
+                    <div>التسارع الناتج ($a$): <span id="acceleration">0.00</span> م/ث²</div>
+                </div>
+            </div>
+
+            <div class="canvas-display">
+                <canvas id="newtonCanvas" width="550" height="400"></canvas>
+            </div>
+        </div>
+    </div>
+    <script src="../js/app.js"></script> 
+</body>
+</html>
