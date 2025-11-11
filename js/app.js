@@ -1,8 +1,8 @@
-// js/app.js - ملف الجافاسكريبت النهائي والموحد
+// js/app.js - ملف الجافاسكريبت النهائي والموحد لجميع المحاكيات
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. تحديد المحاكي النشط بناءً على وجود عنصر Canvas معين
     
+    // 1. تحديد المحاكي النشط
     let currentSimulation = null;
     if (document.getElementById('newtonCanvas')) {
         currentSimulation = 'newton';
@@ -10,10 +10,12 @@ document.addEventListener('DOMContentLoaded', () => {
         currentSimulation = 'projectile';
     } else if (document.getElementById('vectorCanvas')) {
         currentSimulation = 'vector';
+    } else if (document.getElementById('energyCanvas')) {
+        currentSimulation = 'energy';
     }
 
-    if (!currentSimulation) return; // الخروج إذا لم يكن هناك محاكي نشط (كأن تكون الصفحة الرئيسية)
-
+    if (!currentSimulation) return; // الخروج إذا لم يكن هناك محاكي نشط
+    
     // ----------------------------------------------------
     // دالة مساعدة لرسم الأسهم (مُستخدمة في نيوتن والمتجهات)
     // ----------------------------------------------------
@@ -23,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const angle = Math.atan2(endY - startY, endX - startX);
         const headLength = 10;
         
+        // رسم رأس السهم باستخدام التحويلات
         ctx.save();
         ctx.translate(endX, endY);
         ctx.rotate(angle);
@@ -33,8 +36,8 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.fill();
         ctx.restore();
 
-        ctx.font = 'bold 14px Arial'; ctx.textAlign = 'center';
-        // لتجنب تداخل النص مع السهم
+        // كتابة النص
+        ctx.fillStyle = '#343a40'; ctx.font = 'bold 14px Arial'; ctx.textAlign = 'center';
         ctx.fillText(text, (startX + endX) / 2, (startY + endY) / 2 - 10);
         return { endX, endY };
     }
@@ -145,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ----------------------------------------------------
-    // 3. منطق المقذوفات
+    // 3. منطق المقذوفات (تم التأكد من ربط الأحداث)
     // ----------------------------------------------------
     else if (currentSimulation === 'projectile') {
         const canvas = document.getElementById('projectileCanvas');
@@ -179,6 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const availableWidth = canvas.width - 2 * padding;
             const availableHeight = canvas.height - 2 * padding;
             
+            // تحديد مقياس رسم ديناميكي
             const scale = Math.min(
                 availableWidth / (xMax || 100), 
                 availableHeight / (yMax * 2 || 100) 
@@ -194,6 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let t = 0;
             const dt = tFlight / 100;
 
+            // رسم المسار
             while (t <= tFlight) {
                 const x = v0 * Math.cos(angleRad) * t;
                 const y = v0 * Math.sin(angleRad) * t - 0.5 * g * Math.pow(t, 2);
@@ -221,6 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         updateButton.addEventListener('click', calculateAndDraw);
 
+        // بدء الرسم بالحالة الأولية عند التحميل
         calculateAndDraw();
     }
 
@@ -279,15 +285,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const angleRad = angleDeg * (Math.PI / 180);
                 const len = mag * SCALE;
                 const endX = startX + len * Math.cos(angleRad);
-                const endY = startY - len * Math.sin(angleRad); // محور Y معكوس في Canvas
+                const endY = startY - len * Math.sin(angleRad); 
                 return drawArrow(ctx, startX, startY, endX, endY, color, label);
             };
 
-            // رسم المتجهات (طريقة ذيل-رأس)
+            // رسم المتجهات (طريقة ذيل-رأس) والمحصلة
             const endA = drawVectorHelper(magA, angleA, '#007bff', centerX, centerY, 'A');
             drawVectorHelper(magB, angleB, '#28a745', endA.endX, endA.endY, 'B'); 
-            
-            // رسم المحصلة (طريقة متوازي الأضلاع)
             drawVectorHelper(magR, angleR, '#dc3545', centerX, centerY, 'R');
         };
 
@@ -300,4 +304,145 @@ document.addEventListener('DOMContentLoaded', () => {
         calculateAndDraw();
     }
 
+
+    // ----------------------------------------------------
+    // 5. منطق حفظ الطاقة
+    // ----------------------------------------------------
+    else if (currentSimulation === 'energy') {
+        const canvas = document.getElementById('energyCanvas');
+        const ctx = canvas.getContext('2d');
+        const g = 9.8; 
+        const FRAME_RATE = 60; 
+        
+        let animationFrameId = null;
+        let t = 0; 
+        let isRunning = false;
+        
+        const inputs = {
+            mass: document.getElementById('mass-input-e'),
+            height: document.getElementById('height-input-e')
+        };
+        const updateButton = document.getElementById('updateButton');
+
+        const outputs = {
+            massVal: document.getElementById('mass-value-e'),
+            heightVal: document.getElementById('height-value-e'),
+            pe: document.getElementById('pe-value'),
+            ke: document.getElementById('ke-value'),
+            eTotal: document.getElementById('etotal-value'),
+            status: document.getElementById('status-display')
+        };
+
+        const drawSystem = (m, hMax, currentH, currentV) => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const padding = 50;
+            const availableHeight = canvas.height - 2 * padding;
+            const floorY = canvas.height - padding;
+
+            const scale = availableHeight / hMax; 
+            const ballRadius = 15;
+            const ballX = canvas.width / 2;
+            const ballY = floorY - (currentH * scale);
+
+            // رسم الأرض
+            ctx.strokeStyle = '#6c757d'; ctx.lineWidth = 4;
+            ctx.beginPath(); ctx.moveTo(0, floorY); ctx.lineTo(canvas.width, floorY); ctx.stroke();
+            
+            // رسم خط الارتفاع الأقصى
+            ctx.strokeStyle = '#28a745'; ctx.lineWidth = 1; ctx.setLineDash([5, 5]);
+            ctx.beginPath(); ctx.moveTo(padding / 2, floorY - (hMax * scale)); 
+            ctx.lineTo(canvas.width - padding / 2, floorY - (hMax * scale)); ctx.stroke();
+            ctx.setLineDash([]); 
+
+            // رسم الكرة
+            ctx.fillStyle = '#dc3545';
+            ctx.beginPath();
+            ctx.arc(ballX, ballY, ballRadius, 0, 2 * Math.PI);
+            ctx.fill();
+
+            // عرض البيانات على الرسم
+            ctx.fillStyle = '#343a40'; ctx.font = 'bold 16px Arial'; ctx.textAlign = 'right';
+            ctx.fillText(`h: ${currentH.toFixed(2)} m`, ballX - ballRadius - 5, ballY);
+            ctx.fillText(`v: ${currentV.toFixed(2)} m/s`, ballX - ballRadius - 5, ballY + 20);
+        };
+
+        const updateEnergyValues = (m, hMax, currentH, currentV) => {
+            const PE = m * g * currentH;
+            const KE = 0.5 * m * Math.pow(currentV, 2);
+            // يتم حساب الطاقة الكلية عند hMax لضمان الثبات
+            const E_total = m * g * hMax; 
+            
+            outputs.pe.innerText = PE.toFixed(2);
+            outputs.ke.innerText = KE.toFixed(2);
+            outputs.eTotal.innerText = E_total.toFixed(2);
+        };
+        
+        const runSimulation = () => {
+            if (!isRunning) return;
+
+            const m = parseFloat(inputs.mass.value);
+            const hMax = parseFloat(inputs.height.value);
+            
+            const tFlight = Math.sqrt((2 * hMax) / g);
+            const timePeriod = 2 * tFlight; 
+
+            t += 1 / FRAME_RATE;
+            let cycleT = t % timePeriod; 
+            
+            if (cycleT > tFlight) {
+                cycleT = timePeriod - cycleT; 
+            }
+
+            // معادلات الحركة (سقوط حر ثم ارتداد مثالي)
+            const currentH = hMax - 0.5 * g * Math.pow(cycleT, 2);
+            const currentV = g * cycleT;
+
+            drawSystem(m, hMax, currentH, currentV);
+            updateEnergyValues(m, hMax, currentH, currentV);
+            
+            animationFrameId = requestAnimationFrame(runSimulation);
+        };
+        
+        const startSimulation = () => {
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+            isRunning = true;
+            t = 0; 
+            outputs.status.innerText = 'الحالة: قيد التشغيل 🟢';
+            updateButton.innerText = 'إعادة تعيين (Reset)';
+            
+            outputs.massVal.innerText = inputs.mass.value;
+            outputs.heightVal.innerText = inputs.height.value;
+            
+            runSimulation();
+        };
+
+        const pauseSimulation = () => {
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+            isRunning = false;
+            outputs.status.innerText = 'الحالة: جاهز للإطلاق ⏸️';
+            updateButton.innerText = 'بدء المحاكاة';
+            
+            // عرض الحالة الأولية
+            const m = parseFloat(inputs.mass.value);
+            const hMax = parseFloat(inputs.height.value);
+            outputs.massVal.innerText = m;
+            outputs.heightVal.innerText = hMax;
+
+            updateEnergyValues(m, hMax, hMax, 0);
+            drawSystem(m, hMax, hMax, 0);
+        };
+
+        // ربط الأحداث
+        updateButton.addEventListener('click', isRunning ? pauseSimulation : startSimulation);
+        Object.values(inputs).forEach(input => {
+            input.addEventListener('input', pauseSimulation); 
+        });
+
+        pauseSimulation(); 
+    }
 });

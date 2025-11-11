@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محاكي حفظ الطاقة</title>
+    <link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">← العودة إلى قائمة الفصول</a>
+        <h2>💥 محاكي حفظ الطاقة الميكانيكية</h2>
+
+        <div class="simulation-area">
+            <div class="controls">
+                <h3>🕹️ التحكم في النظام:</h3>
+                
+                <label for="mass-input-e">كتلة الجسم ($m$): <span id="mass-value-e">5</span> كجم</label>
+                <input type="range" id="mass-input-e" min="1" max="20" value="5" step="1">
+
+                <label for="height-input-e">الارتفاع الأقصى ($h_{max}$): <span id="height-value-e">10</span> متر</label>
+                <input type="range" id="height-input-e" min="1" max="25" value="10" step="1">
+                
+                <button id="updateButton" class="main-button">بدء/إعادة تعيين المحاكاة</button>
+                
+                <h3 style="margin-top: 30px;">📊 مستويات الطاقة:</h3>
+                <div class="data-output">
+                    <div>طاقة الوضع ($PE$): <span id="pe-value">0.00</span> جول</div>
+                    <div>الطاقة الحركية ($KE$): <span id="ke-value">0.00</span> جول</div>
+                    <div style="border-top: 1px dashed #6c757d; margin-top: 10px;">الطاقة الميكانيكية الكلية ($E_{total}$): <span id="etotal-value">0.00</span> جول</div>
+                </div>
+
+                <div id="status-display" style="text-align: center; margin-top: 20px; font-weight: bold; color: #007bff;">
+                    الحالة: جاهز للإطلاق
+                </div>
+            </div>
+
+            <div class="canvas-display">
+                <canvas id="energyCanvas" width="550" height="550"></canvas>
+            </div>
+        </div>
+    </div>
+    <script src="../js/app.js"></script> 
+</body>
+</html>
