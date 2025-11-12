@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8"> 
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>معمل الفيزياء التفاعلي</title>
+    <!-- تضمين الخط "إنتر" لاستخدامه كاحتياطي للإنجليزية -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <style>
         /* إعادة تعيين عام */
         * {
@@ -14,7 +16,7 @@
         
         /* تخصيص الخطوط للغة العربية */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
             background-color: #f5f7fa;
@@ -153,10 +155,40 @@
     </header>
     <section class="chapter-list">
         
+        <!-- 1. المتجهات والقوى (الفصل 1 و 5) -->
         <a href="simulations/vector.html" class="chapter-card ready">
             <h2>الفصل 1 و 5: المتجهات والقوى</h2>
             <p>جمع المتجهات ورسم المحصلة باستخدام الإحداثيات القطبية والكارتيزية.</p>
         </a>
+
+        <!-- 2. قوانين نيوتن (القوى والتسارع) -->
+        <a href="simulations/newton.html" class="chapter-card ready">
+            <h2>الفصل 4: قوانين نيوتن للحركة</h2>
+            <p>تحليل مخططات القوى الحرة وحساب القوة الصافية والاحتكاك والتسارع.</p>
+        </a>
+        
+        <!-- 3. المقذوفات -->
+        <a href="simulations/projectile.html" class="chapter-card ready">
+            <h2>الفصل 3: حركة المقذوفات</h2>
+            <p>محاكاة المسار الباليستي وحساب أقصى ارتفاع وأقصى مدى لزوايا إطلاق مختلفة.</p>
+        </a>
+
+        <!-- 4. حفظ الطاقة -->
+        <a href="simulations/energy.html" class="chapter-card ready">
+            <h2>الفصل 8: حفظ الطاقة الميكانيكية</h2>
+            <p>استكشاف تحويل الطاقة الكامنة إلى حركية والعكس في نظام مثالي.</p>
+        </a>
+
+        <!-- 5. البندول البسيط (الذي تم إصلاحه) -->
+        <a href="pendulum.html" class="chapter-card ready">
+            <h2>الفصل 15: البندول البسيط والحركة التوافقية</h2>
+            <p>محاكاة البندول البسيط وحساب الزمن الدوري والتردد بناءً على الطول.</p>
+        </a>
+
+    </section>
+</div>
+</body>
+</html>
         
         <a href="simulations/newton.html" class="chapter-card ready">
             <h2>الفصل 4: قوانين نيوتن (الحركة والقوة)</h2>

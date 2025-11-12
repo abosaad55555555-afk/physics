@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
         currentSimulation = 'vector';
     } else if (document.getElementById('energyCanvas')) {
         currentSimulation = 'energy';
+    } else if (document.getElementById('pendulumCanvas')) { // إضافة محاكي البندول
+        currentSimulation = 'pendulum';
     }
 
     if (!currentSimulation) return; // الخروج إذا لم يكن هناك محاكي نشط
@@ -148,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ----------------------------------------------------
-    // 3. منطق المقذوفات (تم التأكد من ربط الأحداث)
+    // 3. منطق المقذوفات
     // ----------------------------------------------------
     else if (currentSimulation === 'projectile') {
         const canvas = document.getElementById('projectileCanvas');
@@ -326,7 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const outputs = {
             massVal: document.getElementById('mass-value-e'),
-            heightVal: document.getElementById('height-value-e'),
+            heightVal: document.getElementById('height-input-e'),
             pe: document.getElementById('pe-value'),
             ke: document.getElementById('ke-value'),
             eTotal: document.getElementById('etotal-value'),
@@ -438,11 +440,163 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         // ربط الأحداث
-        updateButton.addEventListener('click', isRunning ? pauseSimulation : startSimulation);
+        updateButton.addEventListener('click', () => {
+            if (isRunning) {
+                pauseSimulation();
+            } else {
+                startSimulation();
+            }
+        });
         Object.values(inputs).forEach(input => {
             input.addEventListener('input', pauseSimulation); 
         });
 
+        pauseSimulation(); 
+    }
+    
+    // ----------------------------------------------------
+    // 6. منطق محاكي البندول (Simple Pendulum) - تم الإصلاح
+    // ----------------------------------------------------
+    else if (currentSimulation === 'pendulum') {
+        const canvas = document.getElementById('pendulumCanvas');
+        const ctx = canvas.getContext('2d');
+        const g = 9.8; 
+        const FRAME_RATE = 60; 
+        
+        let animationFrameId = null;
+        let t = 0; 
+        let isRunning = false;
+        
+        // نقطة التعليق (المرجع)
+        const pivotX = canvas.width / 2;
+        const pivotY = 50; 
+        
+        const inputs = {
+            length: document.getElementById('length-input'),
+            angle: document.getElementById('angle-input'),
+            mass: document.getElementById('mass-input')
+        };
+        const updateButton = document.getElementById('updateButton');
+        const outputs = {
+            periodCalc: document.getElementById('period-calculated'),
+            frequency: document.getElementById('frequency')
+        };
+        
+        let initialAngleRad;
+        let pendulumLength;
+        let angularFrequency;
+
+        const updatePhysics = () => {
+            // تحديث قيم المدخلات في الواجهة
+            document.getElementById('length-value').innerText = inputs.length.value;
+            document.getElementById('angle-value').innerText = inputs.angle.value;
+            document.getElementById('mass-value').innerText = inputs.mass.value;
+
+            pendulumLength = parseFloat(inputs.length.value);
+            const initialAngleDeg = parseFloat(inputs.angle.value);
+            initialAngleRad = initialAngleDeg * (Math.PI / 180);
+            
+            // حساب الخصائص الفيزيائية
+            // W (أوميجا) = sqrt(g/L)
+            angularFrequency = Math.sqrt(g / pendulumLength);
+            // T = 2 * PI / W
+            const period = (2 * Math.PI) / angularFrequency;
+            const freq = 1 / period;
+
+            outputs.periodCalc.innerText = period.toFixed(3);
+            outputs.frequency.innerText = freq.toFixed(3);
+        };
+        
+        const drawPendulum = (currentAngleRad) => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const scaleFactor = 100; // مقياس رسم مرئي (1 متر = 100 بكسل)
+            const visualLength = pendulumLength * scaleFactor;
+
+            // حساب موضع الكتلة (x, y) باستخدام الإحداثيات القطبية
+            // (الزاوية تقاس من المحور العمودي الموجب)
+            const ballX = pivotX + visualLength * Math.sin(currentAngleRad);
+            const ballY = pivotY + visualLength * Math.cos(currentAngleRad);
+            const ballRadius = 15 + (parseFloat(inputs.mass.value) / 5) * 10; // حجم يعتمد على الكتلة
+
+            // 1. رسم دعم نقطة التعليق
+            ctx.fillStyle = '#495057';
+            ctx.fillRect(pivotX - 30, pivotY - 5, 60, 10);
+            
+            // 2. رسم الخيط
+            ctx.strokeStyle = '#6c757d'; ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(pivotX, pivotY);
+            ctx.lineTo(ballX, ballY);
+            ctx.stroke();
+            
+            // 3. رسم خط عمودي مرجعي (للتأكد من موقع الاتزان)
+            ctx.strokeStyle = '#ccc'; ctx.setLineDash([2, 5]);
+            ctx.beginPath();
+            ctx.moveTo(pivotX, pivotY);
+            ctx.lineTo(pivotX, pivotY + visualLength);
+            ctx.stroke();
+            ctx.setLineDash([]); 
+
+            // 4. رسم كتلة البندول
+            ctx.fillStyle = '#007bff';
+            ctx.beginPath();
+            ctx.arc(ballX, ballY, ballRadius, 0, 2 * Math.PI);
+            ctx.fill();
+        };
+
+        const runSimulation = () => {
+            if (!isRunning) return;
+
+            t += 1 / FRAME_RATE;
+            
+            // معادلة الحركة التوافقية البسيطة: Theta(t) = Theta_max * cos(W * t)
+            const currentAngleRad = initialAngleRad * Math.cos(angularFrequency * t);
+
+            drawPendulum(currentAngleRad);
+            
+            animationFrameId = requestAnimationFrame(runSimulation);
+        };
+        
+        const startSimulation = () => {
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+            isRunning = true;
+            t = 0; // إعادة ضبط الزمن عند البدء
+            updateButton.innerText = 'إيقاف مؤقت (Pause)';
+            
+            updatePhysics(); 
+            runSimulation();
+        };
+
+        const pauseSimulation = () => {
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+            isRunning = false;
+            updateButton.innerText = 'بدء المحاكاة (Start)';
+            
+            updatePhysics(); 
+            // رسم البندول في نقطة البدء (initialAngleRad)
+            drawPendulum(initialAngleRad);
+        };
+
+        // ربط الأحداث
+        updateButton.addEventListener('click', () => {
+            if (isRunning) {
+                pauseSimulation();
+            } else {
+                startSimulation();
+            }
+        });
+        
+        Object.values(inputs).forEach(input => {
+            input.addEventListener('input', pauseSimulation); 
+        });
+
+        // التهيئة الأولية: يجب استدعاء updatePhysics قبل pauseSimulation لأجل initialAngleRad
+        updatePhysics();
         pauseSimulation(); 
     }
 });

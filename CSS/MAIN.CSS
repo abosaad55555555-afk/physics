@@ -1,0 +1,179 @@
+/* css/main.css - التنسيق الأساسي لمعمل الفيزياء التفاعلي */
+
+body {
+    font-family: 'Arial', 'Tahoma', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    color: #343a40;
+    direction: rtl; /* دعم اللغة العربية */
+    text-align: right;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    padding: 40px 0;
+    background-color: #e9ecef;
+    margin-bottom: 30px;
+    border-radius: 10px;
+}
+
+header h1 {
+    color: #007bff;
+    margin-bottom: 5px;
+}
+
+/* بطاقات الفصول */
+.chapter-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.chapter-card {
+    display: block;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border-right: 5px solid #007bff;
+}
+
+.chapter-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+
+.chapter-card h2 {
+    color: #343a40;
+    margin-top: 0;
+    font-size: 1.4rem;
+}
+
+.chapter-card p {
+    color: #6c757d;
+    margin-bottom: 0;
+}
+
+/* روابط العودة */
+.back-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+/* منطقة المحاكاة المشتركة */
+.simulation-area {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.controls, .data-output, .canvas-display {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.controls {
+    flex: 1;
+    min-width: 300px;
+    max-width: 400px;
+}
+
+.canvas-display {
+    flex: 2;
+    min-width: 450px;
+}
+
+/* تنسيق المدخلات */
+label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+input[type="range"] {
+    width: 100%;
+    margin-top: 5px;
+}
+
+.main-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    font-size: 1rem;
+    transition: background-color 0.2s;
+}
+
+.main-button:hover {
+    background-color: #0056b3;
+}
+
+/* مخرجات البيانات */
+.data-output div {
+    padding: 8px 0;
+    border-bottom: 1px dotted #e9ecef;
+}
+
+.data-output div:last-child {
+    border-bottom: none;
+}
+
+.data-output span {
+    font-weight: bold;
+    color: #dc3545; /* لون مميز للنتائج */
+    float: left;
+}
+
+/* تنسيق منطقة Equations */
+.equations-box {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #fff3cd; /* لون تنبيهي خفيف */
+    border: 1px solid #ffeeba;
+    border-radius: 5px;
+    color: #856404;
+    font-size: 0.9rem;
+}
+
+/* Canvas */
+canvas {
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #ffffff;
+}
+
+/* الوسائط (للتوافق مع الأجهزة المحمولة) */
+@media (max-width: 768px) {
+    .simulation-area {
+        flex-direction: column;
+    }
+
+    .controls, .canvas-display {
+        min-width: 100%;
+        max-width: 100%;
+    }
+}

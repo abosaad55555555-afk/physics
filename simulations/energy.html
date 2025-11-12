@@ -7,39 +7,60 @@
     <link rel="stylesheet" href="../css/main.css">
 </head>
 <body>
-    <div class="container">
-        <a href="../index.html" class="back-link">← العودة إلى قائمة الفصول</a>
-        <h2>💥 محاكي حفظ الطاقة الميكانيكية</h2>
+<div class="container">
+    <a href="../index.html" class="back-link">← العودة إلى المعمل</a>
+    
+    <header>
+        <h1>محاكي حفظ الطاقة الميكانيكية</h1>
+        <p>شاهد التحول بين طاقة الوضع الجاذبية (PE) والطاقة الحركية (KE) في نظام معزول.</p>
+    </header>
 
-        <div class="simulation-area">
-            <div class="controls">
-                <h3>🕹️ التحكم في النظام:</h3>
-                
-                <label for="mass-input-e">كتلة الجسم ($m$): <span id="mass-value-e">5</span> كجم</label>
-                <input type="range" id="mass-input-e" min="1" max="20" value="5" step="1">
+    <div class="simulation-area">
+        
+        <!-- 1. منطقة الإدخالات والتحكم -->
+        <div class="controls">
+            <h2>التحكم في النظام</h2>
+            
+            <label for="mass-input-e">كتلة الجسم (m): <span id="mass-value-e">5</span> kg</label>
+            <input type="range" id="mass-input-e" min="1" max="20" value="5" step="0.5">
 
-                <label for="height-input-e">الارتفاع الأقصى ($h_{max}$): <span id="height-value-e">10</span> متر</label>
-                <input type="range" id="height-input-e" min="1" max="25" value="10" step="1">
-                
-                <button id="updateButton" class="main-button">بدء/إعادة تعيين المحاكاة</button>
-                
-                <h3 style="margin-top: 30px;">📊 مستويات الطاقة:</h3>
-                <div class="data-output">
-                    <div>طاقة الوضع ($PE$): <span id="pe-value">0.00</span> جول</div>
-                    <div>الطاقة الحركية ($KE$): <span id="ke-value">0.00</span> جول</div>
-                    <div style="border-top: 1px dashed #6c757d; margin-top: 10px;">الطاقة الميكانيكية الكلية ($E_{total}$): <span id="etotal-value">0.00</span> جول</div>
-                </div>
-
-                <div id="status-display" style="text-align: center; margin-top: 20px; font-weight: bold; color: #007bff;">
-                    الحالة: جاهز للإطلاق
-                </div>
+            <label for="height-input-e">الارتفاع الأقصى (h_max): <span id="height-value-e">10</span> m</label>
+            <input type="range" id="height-input-e" min="1" max="25" value="10" step="1">
+            
+            <button id="updateButton" class="main-button">بدء / إيقاف المحاكاة</button>
+            
+            <div id="status-display" style="text-align: center; margin-top: 15px; font-weight: bold; color: #007bff;">
+                الحالة: جاهز للإطلاق
             </div>
 
-            <div class="canvas-display">
-                <canvas id="energyCanvas" width="550" height="550"></canvas>
+            <div class="equations-box">
+                <p><strong>المعادلات:</strong></p>
+                <p>طاقة الوضع (PE): $$PE = mgh$$</p>
+                <p>الطاقة الحركية (KE): $$KE = \frac{1}{2}mv^2$$</p>
+                <p>الطاقة الكلية (E_total): $$E_{total} = PE + KE$$</p>
             </div>
         </div>
+        
+        <!-- 2. منطقة الرسم -->
+        <div class="canvas-display">
+            <h2>الرسم المرئي للحركة</h2>
+            <canvas id="energyCanvas" width="550" height="400"></canvas>
+        </div>
+
+        <!-- 3. مخرجات البيانات (الطاقة) -->
+        <div class="data-output">
+            <h2>مستويات الطاقة</h2>
+            
+            <div>طاقة الوضع (PE): <span id="pe-value">0.00</span> J</div>
+            <div>الطاقة الحركية (KE): <span id="ke-value">0.00</span> J</div>
+            <div style="border-top: 2px solid #ced4da; margin-top: 10px; padding-top: 10px;">
+                الطاقة الميكانيكية الكلية ($E_{total}$): <span id="etotal-value">0.00</span> J
+            </div>
+        </div>
+
     </div>
-    <script src="../js/app.js"></script> 
+</div>
+
+<script src="../js/app.js"></script> 
 </body>
 </html>

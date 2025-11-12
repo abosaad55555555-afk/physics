@@ -7,36 +7,65 @@
     <link rel="stylesheet" href="../css/main.css">
 </head>
 <body>
-    <div class="container">
-        <a href="../index.html" class="back-link">← العودة إلى قائمة الفصول</a>
-        <h2>➕ محاكي جمع المتجهات (الفصل 1 و 5)</h2>
-        <div class="simulation-area">
-            <div class="controls">
-                <h3>🕹️ المتجه A (A):</h3>
-                <label for="magA">المقدار ($A$): <span id="magA-val">50</span></label>
-                <input type="range" id="magA" min="10" max="100" value="50" step="5">
-                <label for="angleA">الزاوية (&theta;<sub>A</sub>): <span id="angleA-val">45</span>°</label>
-                <input type="range" id="angleA" min="0" max="360" value="45" step="5">
+<div class="container">
+    <a href="../index.html" class="back-link">? العودة إلى المعمل</a>
+    
+    <header>
+        <h1>محاكي جمع المتجهات</h1>
+        <p>قم بتحديد حجم وزاوية متجهين (A و B) وشاهد المحصلة (R) بيانيًا وحسابيًا.</p>
+    </header>
 
-                <h3>🕹️ المتجه B (B):</h3>
-                <label for="magB">المقدار ($B$): <span id="magB-val">30</span></label>
-                <input type="range" id="magB" min="10" max="100" value="30" step="5">
-                <label for="angleB">الزاوية (&theta;<sub>B</sub>): <span id="angleB-val">315</span>°</label>
-                <input type="range" id="angleB" min="0" max="360" value="315" step="5">
+    <div class="simulation-area">
+        
+        <!-- 1. منطقة الإدخالات والتحكم -->
+        <div class="controls">
+            <h2>المدخلات</h2>
+            
+            <div class="vector-input">
+                <h3>المتجه A (أزرق)</h3>
+                <label for="magA">الحجم (Magnitude): <span id="magA-val">50</span></label>
+                <input type="range" id="magA" min="0" max="150" value="50" step="1">
 
-                <button id="updateButton" class="main-button">حساب ورسم المحصلة</button>
-
-                <h3 style="margin-top: 30px;">📊 المتجه المحصل (R):</h3>
-                <div class="data-output">
-                    <div>المقدار ($R$): <span id="magR">0.00</span></div>
-                    <div>الزاوية (&theta;<sub>R</sub>): <span id="angleR">0.00</span>°</div>
-                </div>
+                <label for="angleA">الزاوية (Angle): <span id="angleA-val">30</span> °</label>
+                <input type="range" id="angleA" min="0" max="360" value="30" step="1">
             </div>
-            <div class="canvas-display">
-                <canvas id="vectorCanvas" width="550" height="550"></canvas>
+
+            <div class="vector-input" style="border-top: 1px dashed #ccc; padding-top: 10px;">
+                <h3>المتجه B (أخضر)</h3>
+                <label for="magB">الحجم (Magnitude): <span id="magB-val">70</span></label>
+                <input type="range" id="magB" min="0" max="150" value="70" step="1">
+
+                <label for="angleB">الزاوية (Angle): <span id="angleB-val">120</span> °</label>
+                <input type="range" id="angleB" min="0" max="360" value="120" step="1">
+            </div>
+
+            <button id="updateButton" class="main-button">تحديث ورسم المحصلة</button>
+            
+            <div class="equations-box">
+                <p><strong>المعادلات:</strong></p>
+                <p>المحصلة في x: $$R_x = A \cos \theta_A + B \cos \theta_B$$</p>
+                <p>المحصلة في y: $$R_y = A \sin \theta_A + B \sin \theta_B$$</p>
+                <p>حجم المحصلة: $$|R| = \sqrt{R_x^2 + R_y^2}$$</p>
             </div>
         </div>
+        
+        <!-- 2. منطقة الرسم -->
+        <div class="canvas-display">
+            <h2>التمثيل البياني للمتجهات</h2>
+            <canvas id="vectorCanvas" width="550" height="450"></canvas>
+        </div>
+
+        <!-- 3. مخرجات البيانات (المحصلة) -->
+        <div class="data-output">
+            <h2>نتائج المحصلة (R)</h2>
+            
+            <div>الحجم ($|R|$): <span id="magR">0.00</span></div>
+            <div>الزاوية ($\theta_R$): <span id="angleR">0.00</span> °</div>
+        </div>
+
     </div>
-    <script src="../js/app.js"></script> 
+</div>
+
+<script src="../js/app.js"></script>
 </body>
 </html>
