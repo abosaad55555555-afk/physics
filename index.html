@@ -1,2854 +1,340 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المعلم الذكي للوضوء والصلاة - النسخة الكاملة</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"> 
+    
+    <title>Snake.AI - Viral Ready Mobile Classic</title>
+    
     <style>
-        :root {
-            --primary: #0d47a1;
-            --primary-light: #5472d3;
-            --primary-dark: #002171;
-            --secondary: #2196f3;
-            --secondary-light: #6ec6ff;
-            --secondary-dark: #0069c0;
-            --accent: #ff9800;
-            --accent-light: #ffc947;
-            --accent-dark: #c66900;
-            --success: #4caf50;
-            --success-light: #80e27e;
-            --success-dark: #087f23;
-            --danger: #f44336;
-            --danger-light: #ff7961;
-            --danger-dark: #ba000d;
-            --light: #f5f7fa;
-            --dark: #1a237e;
-            --text: #2c3e50;
-            --text-light: #7f8c8d;
-            --bg-gradient: linear-gradient(135deg, #0d47a1 0%, #1976d2 100%);
-            --card-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-            --hover-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Tajawal', 'Segoe UI', sans-serif;
-            background: var(--bg-gradient);
-            min-height: 100vh;
-            color: var(--text);
-            direction: rtl;
-            overflow-x: hidden;
-        }
-
-        /* تخصيص شريط التمرير */
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--secondary);
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary);
-        }
-
-        .app-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-            position: relative;
-        }
-
-        /* شريط التحميل */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--bg-gradient);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            transition: opacity 0.5s ease;
-        }
-
-        .loading-content {
-            text-align: center;
-            color: white;
-        }
-
-        .loading-spinner {
-            width: 80px;
-            height: 80px;
-            border: 5px solid rgba(255, 255, 255, 0.3);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* الهيدر */
-        .header {
-            background: white;
-            border-radius: 25px;
-            padding: 25px 40px;
-            margin-bottom: 30px;
-            box-shadow: var(--card-shadow);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-            animation: slideDown 0.5s ease;
-        }
-
-        @keyframes slideDown {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .logo-icon {
-            width: 60px;
-            height: 60px;
-            background: var(--primary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.8em;
-            box-shadow: 0 8px 20px rgba(13, 71, 161, 0.3);
-        }
-
-        .logo-text h1 {
-            color: var(--primary);
-            font-size: 1.8em;
-            margin-bottom: 5px;
-        }
-
-        .logo-text p {
-            color: var(--text-light);
-            font-size: 0.9em;
-        }
-
-        .header-controls {
-            display: flex;
-            gap: 12px;
-        }
-
-        .control-btn {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            border: 2px solid var(--light);
-            background: white;
-            color: var(--primary);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2em;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .control-btn::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: var(--primary);
-            border-radius: 50%;
-            transform: scale(0);
-            transition: transform 0.3s;
-            z-index: 0;
-        }
-
-        .control-btn i {
-            position: relative;
-            z-index: 1;
-        }
-
-        .control-btn:hover::after {
-            transform: scale(1);
-        }
-
-        .control-btn:hover {
-            border-color: var(--primary);
-            color: white;
-            transform: translateY(-3px) scale(1.1);
-        }
-
-        .control-btn.active::after {
-            transform: scale(1);
-        }
-
-        .control-btn.active {
-            color: white;
-            border-color: var(--primary);
-        }
-
-        /* الشبكة الرئيسية */
-        .main-grid {
-            display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-
-        @media (max-width: 1100px) {
-            .main-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* لوحة الشخصية */
-        .character-panel {
-            background: white;
-            border-radius: 25px;
-            padding: 30px;
-            box-shadow: var(--card-shadow);
-            position: relative;
-            overflow: hidden;
-            animation: fadeIn 0.6s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateX(-20px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        .character-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--light);
-        }
-
-        .character-container {
-            height: 450px;
-            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-            border-radius: 20px;
-            position: relative;
-            overflow: hidden;
-            border: 3px solid #e0e0e0;
-            transition: all 0.3s;
-        }
-
-        .character-container:hover {
-            border-color: var(--secondary);
-            box-shadow: 0 0 30px rgba(33, 150, 243, 0.2);
-        }
-
-        /* الشخصية ثلاثية الأبعاد */
-        .character-3d {
-            position: absolute;
-            width: 220px;
-            height: 450px;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            perspective: 1000px;
-        }
-
-        .body-part-3d {
-            position: absolute;
-            background: linear-gradient(145deg, #ffccbc, #ffab91);
-            border: 3px solid #ff8a65;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5em;
-            color: rgba(0,0,0,0.4);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-            transform-style: preserve-3d;
-        }
-
-        .body-part-3d::before {
-            content: '';
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            right: 5px;
-            bottom: 5px;
-            background: linear-gradient(145deg, #ffd8c9, #ffb8a3);
-            border-radius: 15px;
-            z-index: -1;
-        }
-
-        .body-part-3d.highlight {
-            background: linear-gradient(145deg, #80deea, #4dd0e1);
-            border-color: #00bcd4;
-            box-shadow: 0 0 30px rgba(0, 188, 212, 0.6);
-            animation: pulseGlow 2s infinite alternate;
-            color: rgba(255,255,255,0.9);
-            transform: translateZ(20px);
-        }
-
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 0 20px rgba(0, 188, 212, 0.6); }
-            100% { box-shadow: 0 0 40px rgba(0, 188, 212, 0.9); }
-        }
-
-        .body-part-3d.completed {
-            background: linear-gradient(145deg, #a5d6a7, #81c784);
-            border-color: var(--success);
-        }
-
-        .face-3d { top: 40px; left: 70px; width: 80px; height: 70px; border-radius: 40px; }
-        .right-arm-3d { top: 120px; left: 15px; width: 55px; height: 150px; border-radius: 27px; }
-        .left-arm-3d { top: 120px; right: 15px; width: 55px; height: 150px; border-radius: 27px; }
-        .right-hand-3d { top: 270px; left: 20px; width: 45px; height: 45px; border-radius: 22px; }
-        .left-hand-3d { top: 270px; right: 20px; width: 45px; height: 45px; border-radius: 22px; }
-        .right-leg-3d { top: 280px; left: 60px; width: 50px; height: 110px; border-radius: 25px; }
-        .left-leg-3d { top: 280px; right: 60px; width: 50px; height: 110px; border-radius: 25px; }
-        .right-foot-3d { top: 390px; left: 60px; width: 55px; height: 30px; border-radius: 15px; }
-        .left-foot-3d { top: 390px; right: 60px; width: 55px; height: 30px; border-radius: 15px; }
-
-        /* تأثيرات الماء */
-        .water-effects {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 2;
-        }
-
-        .water-drop {
-            position: absolute;
-            background: radial-gradient(circle at 30% 30%, rgba(33, 150, 243, 0.9) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            filter: blur(3px);
-            transform-origin: center;
-        }
-
-        .water-ripple {
-            position: absolute;
-            border: 2px solid rgba(33, 150, 243, 0.5);
-            border-radius: 50%;
-            animation: rippleExpand 1s ease-out forwards;
-        }
-
-        @keyframes rippleExpand {
-            0% { transform: scale(0); opacity: 1; }
-            100% { transform: scale(3); opacity: 0; }
-        }
-
-        /* مؤشر التوجيه */
-        .instruction-indicator {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: white;
-            padding: 12px 20px;
-            border-radius: 25px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 10;
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-
-        /* معلومات الخطوة */
-        .step-info {
-            margin-top: 25px;
-            padding: 20px;
-            background: linear-gradient(135deg, #e3f2fd, #f0f7ff);
-            border-radius: 20px;
-            border-right: 5px solid var(--secondary);
-            animation: slideUp 0.5s ease;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        /* لوحة التعليمات */
-        .instructions-panel {
-            background: white;
-            border-radius: 25px;
-            padding: 30px;
-            box-shadow: var(--card-shadow);
-            display: flex;
-            flex-direction: column;
-            animation: fadeIn 0.6s ease 0.2s both;
-        }
-
-        .tab-container {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--light);
-        }
-
-        .tab {
-            padding: 14px 28px;
-            background: var(--light);
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 600;
-            color: var(--text);
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .tab::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--primary);
-            border-radius: 50px;
-            transform: scaleX(0);
-            transform-origin: right;
-            transition: transform 0.3s;
-            z-index: 0;
-        }
-
-        .tab span {
-            position: relative;
-            z-index: 1;
-        }
-
-        .tab.active::before {
-            transform: scaleX(1);
-            transform-origin: left;
-        }
-
-        .tab.active {
-            color: white;
-            box-shadow: 0 8px 20px rgba(13, 71, 161, 0.3);
-        }
-
-        .tab:hover:not(.active) {
-            background: #e8f0fe;
-            transform: translateY(-2px);
-        }
-
-        .steps-scroll {
-            flex: 1;
-            overflow-y: auto;
-            max-height: 500px;
-            padding-right: 10px;
-        }
-
-        .step-card {
-            background: white;
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 15px;
-            border: 2px solid #e8f0fe;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .step-card::before {
-            content: '';
-            position: absolute;
-            right: 0;
-            top: 0;
-            height: 100%;
-            width: 5px;
-            background: var(--secondary);
-            transform: scaleY(0);
-            transition: transform 0.3s;
-        }
-
-        .step-card:hover {
-            transform: translateX(-10px) translateY(-5px);
-            box-shadow: var(--hover-shadow);
-            border-color: var(--secondary-light);
-        }
-
-        .step-card.active {
-            border-color: var(--primary);
-            box-shadow: 0 15px 35px rgba(13, 71, 161, 0.2);
-            background: linear-gradient(135deg, #f0f7ff, #e3f2fd);
-        }
-
-        .step-card.active::before {
-            transform: scaleY(1);
-        }
-
-        .step-card.completed {
-            border-color: var(--success-light);
-            background: linear-gradient(135deg, #f1f8e9, #e8f5e9);
-        }
-
-        .step-card.completed::before {
-            background: var(--success);
-            transform: scaleY(1);
-        }
-
-        .step-number {
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            background: var(--secondary);
-            color: white;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 40px;
-            margin-left: 15px;
-            font-weight: 700;
-            font-size: 1.1em;
-            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.3);
-        }
-
-        .step-card.active .step-number {
-            background: white;
-            color: var(--primary);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .step-card.completed .step-number {
-            background: var(--success);
-            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
-        }
-
-        .step-time {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            color: var(--primary);
-            font-weight: 700;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-        }
-
-        /* لوحة الصلاة */
-        .prayer-panel {
-            grid-column: 1 / -1;
-            background: white;
-            border-radius: 25px;
-            padding: 30px;
-            box-shadow: var(--card-shadow);
-            margin-bottom: 30px;
-            animation: fadeIn 0.6s ease 0.4s both;
-        }
-
-        .prayer-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .prayer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 20px;
-        }
-
-        .prayer-step-card {
-            background: white;
-            border-radius: 20px;
-            padding: 25px 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            border: 2px solid #e8f0fe;
-        }
-
-        .prayer-step-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            opacity: 0;
-            transition: opacity 0.3s;
-            z-index: 0;
-        }
-
-        .prayer-step-card > * {
-            position: relative;
-            z-index: 1;
-        }
-
-        .prayer-step-card:hover {
-            transform: translateY(-8px) scale(1.05);
-            box-shadow: var(--hover-shadow);
-            border-color: var(--secondary);
-        }
-
-        .prayer-step-card.active {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            transform: translateY(-5px) scale(1.03);
-            box-shadow: 0 20px 40px rgba(33, 150, 243, 0.3);
-        }
-
-        .prayer-step-card.active::before {
-            opacity: 1;
-        }
-
-        .prayer-icon {
-            font-size: 3em;
-            margin-bottom: 15px;
-            display: block;
-            transition: transform 0.3s;
-        }
-
-        .prayer-step-card:hover .prayer-icon {
-            transform: scale(1.2);
-        }
-
-        .prayer-duration {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 4px 10px;
-            border-radius: 15px;
-            font-size: 0.8em;
-            color: var(--primary);
-            font-weight: 700;
-        }
-
-        .prayer-step-card.active .prayer-duration {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-        }
-
-        /* لوحة التحكم */
-        .controls-panel {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-bottom: 30px;
-            animation: fadeIn 0.6s ease 0.6s both;
-        }
-
-        @media (max-width: 768px) {
-            .controls-panel {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .control-card {
-            background: white;
-            border-radius: 25px;
-            padding: 30px;
-            box-shadow: var(--card-shadow);
-            transition: transform 0.3s;
-        }
-
-        .control-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-top: 25px;
-        }
-
-        .btn {
-            flex: 1;
-            min-width: 160px;
-            padding: 18px 25px;
-            border: none;
-            border-radius: 15px;
-            font-size: 1em;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateX(-100%);
-            transition: transform 0.3s;
-        }
-
-        .btn:hover::before {
-            transform: translateX(0);
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, var(--success), var(--success-light));
-            color: white;
-        }
-
-        .btn-accent {
-            background: linear-gradient(135deg, var(--accent), var(--accent-light));
-            color: white;
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, var(--danger), var(--danger-light));
-            color: white;
-        }
-
-        .btn-secondary {
-            background: linear-gradient(135deg, #f5f7fa, #e3e8f0);
-            color: var(--text);
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-        }
-
-        .btn:active {
-            transform: translateY(-1px);
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-
-        /* المؤقت */
-        .timer-card {
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-            color: white;
-            text-align: center;
-        }
-
-        .timer-display {
-            font-size: 4em;
-            font-weight: 800;
-            margin: 20px 0;
             font-family: 'Courier New', monospace;
-            text-shadow: 0 5px 20px rgba(0,0,0,0.3);
-            letter-spacing: 2px;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-        }
-
-        .timer-label {
-            font-size: 1.3em;
-            opacity: 0.9;
-            margin-bottom: 10px;
-        }
-
-        /* التقدم */
-        .progress-card {
-            text-align: center;
-        }
-
-        .progress-circle {
-            width: 180px;
-            height: 180px;
-            margin: 0 auto 25px;
-            position: relative;
-        }
-
-        .progress-ring {
-            width: 100%;
-            height: 100%;
-            transform: rotate(-90deg);
-        }
-
-        .progress-ring-circle {
-            fill: none;
-            stroke-width: 10;
-            stroke-linecap: round;
-            transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .progress-ring-bg {
-            stroke: #e8f0fe;
-        }
-
-        .progress-ring-fill {
-            stroke: url(#progress-gradient);
-            stroke-dasharray: 565;
-            stroke-dashoffset: 565;
-        }
-
-        .progress-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 2.5em;
-            font-weight: 800;
-            color: var(--primary);
-        }
-
-        /* الإشعارات */
-        .notification-container {
-            position: fixed;
-            top: 30px;
-            right: 30px;
-            z-index: 1000;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            align-items: center;
+            background-color: #38424a;
+            color: #c0c0c0;
+            margin: 0;
+            padding: 10px;
+            touch-action: none; /* Prevents default mobile scrolling when swiping */
+        }
+
+        header {
             max-width: 400px;
-        }
-
-        @media (max-width: 768px) {
-            .notification-container {
-                right: 15px;
-                left: 15px;
-                max-width: none;
-            }
-        }
-
-        .notification {
-            background: white;
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            transform: translateX(500px);
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border-right: 5px solid var(--accent);
-            animation: notificationSlide 0.5s forwards;
-        }
-
-        @keyframes notificationSlide {
-            to { transform: translateX(0); }
-        }
-
-        .notification.success {
-            border-right-color: var(--success);
-        }
-
-        .notification.warning {
-            border-right-color: var(--accent);
-        }
-
-        .notification.error {
-            border-right-color: var(--danger);
-        }
-
-        .notification.info {
-            border-right-color: var(--secondary);
-        }
-
-        .notification-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5em;
-            color: white;
-            flex-shrink: 0;
-        }
-
-        .notification.success .notification-icon {
-            background: var(--success);
-        }
-
-        .notification.warning .notification-icon {
-            background: var(--accent);
-        }
-
-        .notification.error .notification-icon {
-            background: var(--danger);
-        }
-
-        .notification.info .notification-icon {
-            background: var(--secondary);
-        }
-
-        .notification-content {
-            flex: 1;
-        }
-
-        .notification-content strong {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 1.1em;
-        }
-
-        .notification-close {
-            background: none;
-            border: none;
-            font-size: 1.2em;
-            color: var(--text-light);
-            cursor: pointer;
-            padding: 5px;
-            transition: color 0.3s;
-        }
-
-        .notification-close:hover {
-            color: var(--danger);
-        }
-
-        /* أنيميشن الصلاة */
-        .prayer-animation-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
             width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.85);
-            z-index: 2000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(10px);
-            animation: fadeInOverlay 0.3s ease;
-        }
-
-        @keyframes fadeInOverlay {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .prayer-animation-container {
-            width: 90%;
-            max-width: 700px;
-            height: 500px;
-            background: white;
-            border-radius: 30px;
-            overflow: hidden;
-            position: relative;
-            box-shadow: 0 40px 80px rgba(0,0,0,0.5);
-            animation: scaleIn 0.3s ease;
-        }
-
-        @keyframes scaleIn {
-            from { transform: scale(0.8); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
-        .prayer-3d-scene {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-        }
-
-        .prayer-figure {
-            position: absolute;
-            width: 150px;
-            height: 250px;
-            left: 50%;
-            top: 50%;
-            background: linear-gradient(145deg, #ffccbc, #ffab91);
-            border-radius: 25px;
-            transform-origin: center;
-            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-        }
-
-        .prayer-light {
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 70%);
-            border-radius: 50%;
-            filter: blur(40px);
-            opacity: 0.5;
-            animation: lightPulse 3s infinite alternate;
-        }
-
-        @keyframes lightPulse {
-            from { opacity: 0.3; transform: scale(0.8); }
-            to { opacity: 0.7; transform: scale(1.2); }
-        }
-
-        /* الكونفيتي */
-        .confetti-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1000;
-            overflow: hidden;
-        }
-
-        .confetti {
-            position: absolute;
-            width: 15px;
-            height: 15px;
-            opacity: 0;
-            animation: confettiFall 3s linear forwards;
-        }
-
-        @keyframes confettiFall {
-            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-        }
-
-        /* الأذكار */
-        .azkar-panel {
-            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-            border-radius: 25px;
-            padding: 30px;
-            margin-top: 20px;
-            border-right: 5px solid var(--success);
-            display: none;
-            animation: fadeIn 0.6s ease;
-        }
-
-        .azkar-text {
-            font-size: 1.4em;
-            text-align: center;
-            color: var(--success-dark);
-            font-weight: 600;
-            line-height: 1.8;
-            margin-bottom: 25px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.7);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        /* شريط التقدم الدائري */
-        .progress-stats {
             display: flex;
-            justify-content: space-around;
-            margin-top: 20px;
-            flex-wrap: wrap;
-            gap: 15px;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            text-transform: uppercase;
         }
 
-        .stat-item {
-            text-align: center;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            min-width: 120px;
-        }
-
-        .stat-number {
-            display: block;
+        h1 {
+            color: #00ff00;
             font-size: 2em;
-            font-weight: 800;
-            color: var(--primary);
-            margin-bottom: 5px;
+            margin: 0;
+            text-shadow: 0 0 5px #00ff00;
         }
 
-        .stat-label {
-            font-size: 0.9em;
-            color: var(--text-light);
+        #game-container {
+            position: relative;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+            border: 3px solid #00ff00;
+            max-width: 95vw; /* Maximize space on mobile screens */
+        }
+        
+        #gameCanvas {
+            /* Ensures the canvas scales responsively within the container */
+            width: 100%; 
+            height: auto;
+            background-color: #2e3a45;
+            display: block;
         }
 
-        /* موجات الصوت */
-        .sound-wave {
+        #gameOverScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            color: #00ff00;
             display: flex;
-            align-items: flex-end;
-            gap: 4px;
-            height: 50px;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
         }
 
-        .wave-bar {
-            width: 6px;
-            background: var(--primary);
-            border-radius: 3px;
-            animation: wave 1.2s infinite ease-in-out;
+        .hidden {
+            display: none !important;
         }
 
-        @keyframes wave {
-            0%, 100% { height: 10px; }
-            50% { height: 50px; }
+        .game-button {
+            padding: 10px 20px;
+            font-size: 1.1em;
+            cursor: pointer;
+            border: none;
+            border-radius: 0;
+            margin-top: 15px;
+            text-transform: uppercase;
+            font-weight: bold;
+            background-color: #00ff00;
+            color: black;
+            transition: background-color 0.1s;
+        }
+        
+        .game-button:hover, .game-button:active {
+            background-color: #00cc00;
+        }
+        
+        /* Style for the viral sharing button */
+        #shareButton {
+            background-color: #ff4500;
+            color: white;
+        }
+        #shareButton:hover, #shareButton:active {
+            background-color: #cc3700;
         }
 
-        /* تأثير الرسم */
-        .drawing-effect {
-            position: absolute;
-            pointer-events: none;
-        }
-
-        /* تحسينات للهواتف */
-        @media (max-width: 768px) {
-            .header {
-                padding: 20px;
-                text-align: center;
-                justify-content: center;
-            }
-            
-            .logo {
-                justify-content: center;
-                width: 100%;
-            }
-            
-            .header-controls {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .character-container {
-                height: 350px;
-            }
-            
-            .character-3d {
-                width: 180px;
-                height: 350px;
-            }
-            
-            .timer-display {
-                font-size: 2.8em;
-            }
-            
-            .progress-circle {
-                width: 140px;
-                height: 140px;
-            }
-            
-            .btn {
-                min-width: 100%;
-            }
-            
-            .prayer-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        /* طباعة */
-        @media print {
-            .header-controls,
-            .btn-group,
-            .tab-container,
-            .control-btn {
-                display: none !important;
-            }
-            
-            .character-container {
-                height: 300px;
-            }
-        }
-
-        /* تأثيرات خاصة */
-        .ripple {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(33, 150, 243, 0.4);
-            transform: scale(0);
-            animation: ripple 0.6s ease-out;
-            pointer-events: none;
-        }
-
-        @keyframes ripple {
-            to {
-                transform: scale(4);
-                opacity: 0;
-            }
-        }
-
-        .floating {
-            animation: floating 3s ease-in-out infinite;
-        }
-
-        @keyframes floating {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .typewriter {
-            overflow: hidden;
-            border-right: .15em solid var(--primary);
-            white-space: nowrap;
-            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
-        }
-
-        @keyframes typing {
-            from { width: 0 }
-            to { width: 100% }
-        }
-
-        @keyframes blink-caret {
-            from, to { border-color: transparent }
-            50% { border-color: var(--primary) }
-        }
-
-        /* إصلاحات للتوافق */
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
-        }
-
-        /* تحسينات الأداء */
-        .will-change-transform {
-            will-change: transform;
-        }
-
-        .will-change-opacity {
-            will-change: opacity;
+        /* Instructions */
+        #instructions {
+            color: #00ff00;
+            margin-top: 15px;
+            font-size: 0.9em;
         }
     </style>
 </head>
 <body>
-    <!-- شاشة التحميل -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-content">
-            <div class="loading-spinner"></div>
-            <h2 style="color: white; margin-bottom: 10px;">المعلم الذكي للوضوء والصلاة</h2>
-            <p style="color: rgba(255,255,255,0.8);">جاري تحميل التطبيق...</p>
-        </div>
-    </div>
+    <header>
+        <h1>Snake.AI</h1>
+        <div id="score-container">Score: <span id="score">0</span></div>
+    </header>
 
-    <!-- الكونفيتي -->
-    <div class="confetti-container" id="confettiContainer"></div>
-
-    <!-- أنيميشن الصلاة -->
-    <div class="prayer-animation-overlay" id="prayerAnimationOverlay">
-        <div class="prayer-animation-container">
-            <div class="prayer-3d-scene">
-                <div class="prayer-figure" id="prayerFigure"></div>
-                <div class="prayer-light"></div>
-            </div>
-            <div style="position: absolute; bottom: 20px; left: 20px; right: 20px; text-align: center;">
-                <h3 style="color: var(--primary); margin-bottom: 15px;" id="prayerAnimationTitle">حركة الصلاة</h3>
-                <button class="btn btn-danger" id="closePrayerAnimationBtn">
-                    <i class="fas fa-times"></i> إغلاق المشاهدة
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- التطبيق الرئيسي -->
-    <div class="app-container" id="appContainer" style="display: none;">
-        <!-- الهيدر -->
-        <header class="header">
-            <div class="logo">
-                <div class="logo-icon">
-                    <i class="fas fa-mosque"></i>
-                </div>
-                <div class="logo-text">
-                    <h1>المعلم الذكي للوضوء والصلاة</h1>
-                    <p>محاكاة تفاعلية ثلاثية الأبعاد - النسخة الكاملة</p>
-                </div>
-            </div>
-            <div class="header-controls">
-                <button class="control-btn" id="soundToggle" title="تشغيل/إيقاف الصوت">
-                    <i class="fas fa-volume-up"></i>
-                </button>
-                <button class="control-btn" id="helpToggle" title="المساعدة">
-                    <i class="fas fa-question-circle"></i>
-                </button>
-                <button class="control-btn" id="darkModeToggle" title="الوضع الليلي">
-                    <i class="fas fa-moon"></i>
-                </button>
-                <button class="control-btn" id="fullscreenToggle" title="ملء الشاشة">
-                    <i class="fas fa-expand"></i>
-                </button>
-            </div>
-        </header>
-
-        <!-- الشبكة الرئيسية -->
-        <div class="main-grid">
-            <!-- لوحة الشخصية -->
-            <div class="character-panel">
-                <div class="character-header">
-                    <h2><i class="fas fa-user-circle"></i> المحاكاة ثلاثية الأبعاد</h2>
-                    <div class="sound-wave" id="soundWave" style="display: none;">
-                        <div class="wave-bar" style="animation-delay: 0s"></div>
-                        <div class="wave-bar" style="animation-delay: 0.1s"></div>
-                        <div class="wave-bar" style="animation-delay: 0.2s"></div>
-                        <div class="wave-bar" style="animation-delay: 0.3s"></div>
-                        <div class="wave-bar" style="animation-delay: 0.4s"></div>
-                    </div>
-                </div>
-                
-                <div class="character-container">
-                    <div class="character-3d">
-                        <!-- أجزاء الجسم -->
-                        <div class="body-part-3d face-3d" data-part="face" title="الوجه">
-                            <i class="fas fa-user"></i>
-                        </div>
-                        <div class="body-part-3d right-arm-3d" data-part="right-arm" title="الذراع اليمنى">
-                            <i class="fas fa-hand-paper"></i>
-                        </div>
-                        <div class="body-part-3d left-arm-3d" data-part="left-arm" title="الذراع اليسرى">
-                            <i class="fas fa-hand-paper"></i>
-                        </div>
-                        <div class="body-part-3d right-hand-3d" data-part="right-hand" title="اليد اليمنى">
-                            <i class="fas fa-hand-rock"></i>
-                        </div>
-                        <div class="body-part-3d left-hand-3d" data-part="left-hand" title="اليد اليسرى">
-                            <i class="fas fa-hand-rock"></i>
-                        </div>
-                        <div class="body-part-3d right-leg-3d" data-part="right-leg" title="الرجل اليمنى">
-                            <i class="fas fa-shoe-prints"></i>
-                        </div>
-                        <div class="body-part-3d left-leg-3d" data-part="left-leg" title="الرجل اليسرى">
-                            <i class="fas fa-shoe-prints"></i>
-                        </div>
-                        <div class="body-part-3d right-foot-3d" data-part="right-foot" title="القدم اليمنى">
-                            <i class="fas fa-walking"></i>
-                        </div>
-                        <div class="body-part-3d left-foot-3d" data-part="left-foot" title="القدم اليسرى">
-                            <i class="fas fa-walking"></i>
-                        </div>
-                    </div>
-                    
-                    <!-- تأثيرات الماء -->
-                    <div class="water-effects" id="waterEffects"></div>
-                    
-                    <!-- مؤشر التوجيه -->
-                    <div class="instruction-indicator" id="instructionIndicator">
-                        <i class="fas fa-hand-point-up"></i>
-                        <span>انقر على الأجزاء المضيئة</span>
-                    </div>
-                </div>
-                
-                <!-- معلومات الخطوة -->
-                <div class="step-info">
-                    <h4 id="currentStepTitle">الخطوة الحالية: النية</h4>
-                    <p id="currentStepDescription">تنوي الوضوء في قلبك بقول: نويت الوضوء لرفع الحدث الأصغر</p>
-                    <div class="progress-stats">
-                        <div class="stat-item">
-                            <span class="stat-number" id="stepProgress">1/10</span>
-                            <span class="stat-label">الخطوة</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-number" id="timeRemaining">5</span>
-                            <span class="stat-label">ثواني متبقية</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-number" id="completedCount">0</span>
-                            <span class="stat-label">مكتمل</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- لوحة التعليمات -->
-            <div class="instructions-panel">
-                <div class="tab-container">
-                    <button class="tab active" data-tab="wudu">
-                        <span><i class="fas fa-hands-wash"></i> خطوات الوضوء</span>
-                    </button>
-                    <button class="tab" data-tab="prayer">
-                        <span><i class="fas fa-person-praying"></i> حركات الصلاة</span>
-                    </button>
-                    <button class="tab" data-tab="azkar">
-                        <span><i class="fas fa-pray"></i> الأذكار</span>
-                    </button>
-                </div>
-                
-                <div class="steps-scroll" id="stepsScroll">
-                    <!-- خطوات الوضوء تضاف بالجافاسكريبت -->
-                </div>
-                
-                <!-- الأذكار -->
-                <div class="azkar-panel" id="azkarPanel">
-                    <div class="azkar-text" id="azkarText">
-                        سبحان الله وبحمده، سبحان الله العظيم
-                    </div>
-                    <div style="text-align: center;">
-                        <button class="btn btn-success" id="nextZikrBtn">
-                            <i class="fas fa-forward"></i> ذكر التالي
-                        </button>
-                        <button class="btn btn-secondary" id="repeatZikrBtn" style="margin-right: 10px;">
-                            <i class="fas fa-redo"></i> تكرار الذكر
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- لوحة الصلاة -->
-        <div class="prayer-panel">
-            <div class="prayer-header">
-                <h2><i class="fas fa-person-praying"></i> محاكاة حركات الصلاة</h2>
-                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                    <button class="btn btn-accent" id="autoPrayerBtn">
-                        <i class="fas fa-robot"></i> الصلاة التلقائية
-                    </button>
-                    <button class="btn btn-success" id="practiceModeBtn">
-                        <i class="fas fa-graduation-cap"></i> وضع التدريب
-                    </button>
-                    <button class="btn btn-secondary" id="resetPrayerBtn">
-                        <i class="fas fa-redo"></i> إعادة الصلاة
-                    </button>
-                </div>
-            </div>
+    <div id="game-container">
+        <canvas id="gameCanvas" width="400" height="400"></canvas>
+        
+        <div id="gameOverScreen" class="hidden">
+            <h2>GAME OVER</h2>
+            <p>Final Score: <span id="finalScore">0</span></p>
+            <p id="viralMessage"></p>
             
-            <div class="prayer-grid" id="prayerGrid">
-                <!-- خطوات الصلاة تضاف بالجافاسكريبت -->
-            </div>
+            <button id="shareButton" class="game-button">SHARE HIGH SCORE!</button>
+
+            <button id="retryButton" class="game-button">PLAY AGAIN</button>
         </div>
-
-        <!-- لوحة التحكم -->
-        <div class="controls-panel">
-            <!-- التحكم الأساسي -->
-            <div class="control-card">
-                <h3><i class="fas fa-gamepad"></i> التحكم الرئيسي</h3>
-                <div class="btn-group">
-                    <button class="btn btn-secondary" id="prevStepBtn">
-                        <i class="fas fa-arrow-right"></i> الخطوة السابقة
-                    </button>
-                    <button class="btn btn-primary" id="nextStepBtn">
-                        <i class="fas fa-arrow-left"></i> الخطوة التالية
-                    </button>
-                    <button class="btn btn-success" id="completeWuduBtn">
-                        <i class="fas fa-check-double"></i> إكمال الوضوء
-                    </button>
-                    <button class="btn btn-accent" id="startPrayerBtn">
-                        <i class="fas fa-play-circle"></i> بدء الصلاة
-                    </button>
-                </div>
-            </div>
-
-            <!-- المؤقت -->
-            <div class="control-card timer-card">
-                <h3><i class="fas fa-clock"></i> المؤقت الزمني</h3>
-                <div class="timer-display" id="timerDisplay">00:00</div>
-                <div class="timer-label">الوقت المنقضي منذ البداية</div>
-                <div class="btn-group" style="margin-top: 25px;">
-                    <button class="btn btn-secondary" id="pauseTimerBtn">
-                        <i class="fas fa-pause"></i> إيقاف/استئناف
-                    </button>
-                    <button class="btn btn-secondary" id="resetTimerBtn">
-                        <i class="fas fa-redo"></i> إعادة التعيين
-                    </button>
-                </div>
-            </div>
-
-            <!-- التقدم والإحصائيات -->
-            <div class="control-card progress-card">
-                <h3><i class="fas fa-chart-line"></i> التقدم والإنجاز</h3>
-                <div class="progress-circle">
-                    <svg class="progress-ring" viewBox="0 0 100 100">
-                        <defs>
-                            <linearGradient id="progress-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                <stop offset="0%" stop-color="#2196f3" />
-                                <stop offset="100%" stop-color="#4caf50" />
-                            </linearGradient>
-                        </defs>
-                        <circle class="progress-ring-circle progress-ring-bg" cx="50" cy="50" r="45"></circle>
-                        <circle class="progress-ring-circle progress-ring-fill" id="progressRing" cx="50" cy="50" r="45"></circle>
-                    </svg>
-                    <div class="progress-text" id="progressText">0%</div>
-                </div>
-                <div style="text-align: center; margin-top: 10px;">
-                    <p id="progressDetails">0 من 10 خطوة مكتملة</p>
-                    <p style="color: var(--text-light); font-size: 0.9em; margin: 10px 0;">
-                        <i class="fas fa-trophy"></i> النقاط: <span id="totalScore">0</span>
-                    </p>
-                    <button class="btn btn-secondary" id="resetProgressBtn">
-                        <i class="fas fa-undo"></i> إعادة التعيين
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- تذييل الصفحة -->
-        <footer style="text-align: center; padding: 20px; color: white; opacity: 0.8;">
-            <p>المعلم الذكي للوضوء والصلاة &copy; 2024 - نسخة كاملة ومحسنة</p>
-            <p style="font-size: 0.9em; margin-top: 5px;">
-                تصميم وتطوير: نظام تعليمي تفاعلي للوضوء والصلاة
-            </p>
-        </footer>
     </div>
-
-    <!-- حاوية الإشعارات -->
-    <div class="notification-container" id="notificationContainer"></div>
-
-    <!-- ملفات الصوت -->
-    <audio id="waterSound" preload="auto"></audio>
-    <audio id="successSound" preload="auto"></audio>
-    <audio id="clickSound" preload="auto"></audio>
-
-    <!-- مساعد الصوت (للنطق) -->
-    <div id="speechHelper" style="display: none;"></div>
+    
+    <p id="instructions">Use WASD/Arrows (Desktop) or Swipe (Mobile) to play.</p>
 
     <script>
-        // ==================== بيانات التطبيق ====================
-        const APP_DATA = {
-            wuduSteps: [
-                {
-                    id: 1,
-                    title: "النية",
-                    description: "تنوي الوضوء في قلبك بقول: نويت الوضوء لرفع الحدث الأصغر",
-                    parts: [],
-                    duration: 5,
-                    audio: null,
-                    details: "النية محلها القلب، ولا يشترط النطق بها"
-                },
-                {
-                    id: 2,
-                    title: "بسم الله",
-                    description: "تقول: بسم الله الرحمن الرحيم",
-                    parts: [],
-                    duration: 3,
-                    audio: "bismillah",
-                    details: "البدء ببسم الله مستحب عند الوضوء"
-                },
-                {
-                    id: 3,
-                    title: "غسل الكفين",
-                    description: "تغسل كفيك ثلاث مرات مع تدليك الأصابع",
-                    parts: ['right-hand', 'left-hand'],
-                    duration: 8,
-                    audio: "water",
-                    details: "ابدأ باليد اليمنى ثم اليسرى، ثلاث مرات"
-                },
-                {
-                    id: 4,
-                    title: "المضمضة",
-                    description: "تمضمض ثلاث مرات (تحريك الماء في الفم جيداً)",
-                    parts: ['face'],
-                    duration: 10,
-                    audio: "water",
-                    details: "إدخال الماء للفم وإخراجه ثلاث مرات"
-                },
-                {
-                    id: 5,
-                    title: "الاستنشاق",
-                    description: "تستنشق الماء في أنفك ثلاث مرات وتستنثر",
-                    parts: ['face'],
-                    duration: 10,
-                    audio: "water",
-                    details: "إدخال الماء للأنف وإخراجه بقوة"
-                },
-                {
-                    id: 6,
-                    title: "غسل الوجه",
-                    description: "تغسل وجهك من منبت الشعر إلى الذقن، ومن الأذن إلى الأذن",
-                    parts: ['face'],
-                    duration: 12,
-                    audio: "water",
-                    details: "ثلاث مرات مع التأكد من وصول الماء لكل أجزاء الوجه"
-                },
-                {
-                    id: 7,
-                    title: "غسل اليدين",
-                    description: "تغسل يديك إلى المرفقين ثلاث مرات (اليمنى أولاً)",
-                    parts: ['right-arm', 'left-arm'],
-                    duration: 15,
-                    audio: "water",
-                    details: "من أطراف الأصابع إلى نهاية المرفق، ثلاث مرات"
-                },
-                {
-                    id: 8,
-                    title: "مسح الرأس",
-                    description: "تمسح رأسك مرة واحدة من الأمام إلى الخلف",
-                    parts: ['face'],
-                    duration: 7,
-                    audio: "water",
-                    details: "بالماء المتبقي على اليدين، مرة واحدة"
-                },
-                {
-                    id: 9,
-                    title: "غسل الرجلين",
-                    description: "تغسل رجليك إلى الكعبين ثلاث مرات (اليمنى أولاً)",
-                    parts: ['right-foot', 'left-foot', 'right-leg', 'left-leg'],
-                    duration: 15,
-                    audio: "water",
-                    details: "تشمل الكعبين والعقبين، ثلاث مرات"
-                },
-                {
-                    id: 10,
-                    title: "الدعاء",
-                    description: "تقول: أشهد أن لا إله إلا الله وحده لا شريك له، وأشهد أن محمداً عبده ورسوله",
-                    parts: [],
-                    duration: 10,
-                    audio: "dua",
-                    details: "اللهم اجعلني من التوابين واجعلني من المتطهرين"
-                }
-            ],
-            
-            prayerSteps: [
-                { id: 1, name: "التكبير", icon: "🙏", duration: 3, position: "standing" },
-                { id: 2, name: "القراءة", icon: "📖", duration: 15, position: "standing" },
-                { id: 3, name: "الركوع", icon: "🕌", duration: 7, position: "bowing" },
-                { id: 4, name: "الرفع", icon: "⬆️", duration: 3, position: "standing" },
-                { id: 5, name: "السجود", icon: "🕋", duration: 10, position: "prostration" },
-                { id: 6, name: "الجلوس", icon: "🧎", duration: 5, position: "sitting" },
-                { id: 7, name: "السجود", icon: "🕋", duration: 10, position: "prostration" },
-                { id: 8, name: "التشهد", icon: "🤲", duration: 12, position: "sitting" },
-                { id: 9, name: "السلام", icon: "☮️", duration: 5, position: "standing" }
-            ],
-            
-            azkarList: [
-                "سُبْحَانَ اللهِ وَبِحَمْدِهِ، سُبْحَانَ اللهِ الْعَظِيمِ",
-                "أَسْتَغْفِرُ اللهَ الْعَظِيمَ الَّذِي لَا إِلَهَ إِلَّا هُوَ الْحَيَّ الْقَيُّومَ وَأَتُوبُ إِلَيْهِ",
-                "لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
-                "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ",
-                "حَسْبِيَ اللهُ وَنِعْمَ الْوَكِيلُ",
-                "لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللهِ",
-                "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ",
-                "رَضِيتُ بِاللهِ رَبًّا وَبِالْإِسْلَامِ دِينًا وَبِمُحَمَّدٍ صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ نَبِيًّا"
-            ],
-            
-            bodyParts: {
-                'face': 'الوجه',
-                'right-arm': 'الذراع اليمنى',
-                'left-arm': 'الذراع اليسرى',
-                'right-hand': 'اليد اليمنى',
-                'left-hand': 'اليد اليسرى',
-                'right-leg': 'الرجل اليمنى',
-                'left-leg': 'الرجل اليسرى',
-                'right-foot': 'القدم اليمنى',
-                'left-foot': 'القدم اليسرى'
-            }
-        };
+        // --- Game Setup Variables ---
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreDisplay = document.getElementById('score');
+        const gameOverScreen = document.getElementById('gameOverScreen');
+        const finalScoreDisplay = document.getElementById('finalScore');
+        const retryButton = document.getElementById('retryButton');
+        const shareButton = document.getElementById('shareButton');
+        const viralMessage = document.getElementById('viralMessage');
 
-        // ==================== حالة التطبيق ====================
-        const AppState = {
-            // حالة المستخدم
-            currentStep: 0,
-            completedSteps: new Set(),
-            currentPrayerStep: 0,
-            currentAzkarIndex: 0,
-            totalScore: 0,
-            streakDays: 0,
-            
-            // إعدادات المستخدم
-            isSoundEnabled: true,
-            isDarkMode: false,
-            isFullscreen: false,
-            isPracticeMode: false,
-            
-            // حالة التطبيق
-            isPrayerMode: false,
-            prayerInProgress: false,
-            isWuduCompleted: false,
-            
-            // المؤقتات
-            startTime: null,
-            elapsedTime: 0,
-            timerInterval: null,
-            stepTimer: null,
-            
-            // النظام الصوتي
-            audioContext: null,
-            speechSynthesis: null
-        };
+        // Game parameters
+        const FIXED_WIDTH = 400; 
+        const gridSize = 20;
+        const tileCount = FIXED_WIDTH / gridSize;
+        const gameSpeed = 10;
+        let score = 0;
+        let gameLoopInterval;
 
-        // ==================== الفئات المساعدة ====================
-        class AudioManager {
-            constructor() {
-                this.context = new (window.AudioContext || window.webkitAudioContext)();
-                this.initSounds();
-            }
+        // Snake and Control state
+        let snake = [];
+        let velocity = {};
+        let nextVelocity = {};
+        let food = {};
+
+        // --- Touch Input Variables ---
+        let touchStartX = 0;
+        let touchStartY = 0;
+        const SWIPE_THRESHOLD = 20;
+
+        // --- Core Game Functions ---
+
+        function startGame() {
+            snake = [{ x: 10, y: 10 }];
+            velocity = { x: 1, y: 0 };
+            nextVelocity = { x: 1, y: 0 };
+            score = 0;
+            scoreDisplay.textContent = score;
+            gameOverScreen.classList.add('hidden');
             
-            initSounds() {
-                // إنشاء أصوت أساسية
-                this.sounds = {
-                    water: this.createWaterSound(),
-                    success: this.createSuccessSound(),
-                    click: this.createClickSound(),
-                    takbir: this.createTakbirSound()
-                };
-            }
-            
-            createWaterSound() {
-                return () => {
-                    const oscillator = this.context.createOscillator();
-                    const gainNode = this.context.createGain();
-                    
-                    oscillator.connect(gainNode);
-                    gainNode.connect(this.context.destination);
-                    
-                    oscillator.frequency.value = 400 + Math.random() * 200;
-                    oscillator.type = 'sine';
-                    
-                    gainNode.gain.setValueAtTime(0.2, this.context.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 1);
-                    
-                    oscillator.start();
-                    setTimeout(() => oscillator.stop(), 1000);
-                };
-            }
-            
-            createSuccessSound() {
-                return () => {
-                    const frequencies = [523.25, 659.25, 783.99];
-                    
-                    frequencies.forEach((freq, index) => {
-                        setTimeout(() => {
-                            const oscillator = this.context.createOscillator();
-                            const gainNode = this.context.createGain();
-                            
-                            oscillator.connect(gainNode);
-                            gainNode.connect(this.context.destination);
-                            
-                            oscillator.frequency.value = freq;
-                            oscillator.type = 'sine';
-                            
-                            gainNode.gain.setValueAtTime(0.2, this.context.currentTime);
-                            gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 0.3);
-                            
-                            oscillator.start();
-                            setTimeout(() => oscillator.stop(), 300);
-                        }, index * 200);
-                    });
-                };
-            }
-            
-            createClickSound() {
-                return () => {
-                    const oscillator = this.context.createOscillator();
-                    const gainNode = this.context.createGain();
-                    
-                    oscillator.connect(gainNode);
-                    gainNode.connect(this.context.destination);
-                    
-                    oscillator.frequency.value = 800;
-                    oscillator.type = 'sine';
-                    
-                    gainNode.gain.setValueAtTime(0.1, this.context.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 0.1);
-                    
-                    oscillator.start();
-                    setTimeout(() => oscillator.stop(), 100);
-                };
-            }
-            
-            createTakbirSound() {
-                return () => {
-                    const oscillator = this.context.createOscillator();
-                    const gainNode = this.context.createGain();
-                    
-                    oscillator.connect(gainNode);
-                    gainNode.connect(this.context.destination);
-                    
-                    oscillator.frequency.value = 150;
-                    oscillator.type = 'sine';
-                    
-                    gainNode.gain.setValueAtTime(0.1, this.context.currentTime);
-                    gainNode.gain.linearRampToValueAtTime(0.3, this.context.currentTime + 0.5);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 1.5);
-                    
-                    oscillator.start();
-                    setTimeout(() => oscillator.stop(), 1500);
-                };
-            }
-            
-            play(soundName) {
-                if (!AppState.isSoundEnabled) return;
-                
-                if (this.sounds[soundName]) {
-                    this.sounds[soundName]();
-                    this.showSoundWave();
-                }
-            }
-            
-            showSoundWave() {
-                const wave = document.getElementById('soundWave');
-                wave.style.display = 'flex';
-                setTimeout(() => wave.style.display = 'none', 1200);
-            }
+            placeFood();
+
+            if (gameLoopInterval) clearInterval(gameLoopInterval);
+            gameLoopInterval = setInterval(gameLoop, 1000 / gameSpeed);
         }
 
-        class NotificationManager {
-            constructor() {
-                this.container = document.getElementById('notificationContainer');
-                this.notificationCount = 0;
+        function gameLoop() {
+            velocity = nextVelocity;
+            
+            if (checkCollision()) {
+                gameOver();
+                return;
+            }
+
+            const head = { x: snake[0].x + velocity.x, y: snake[0].y + velocity.y };
+            
+            // Classic Wall Collision Check
+            if (head.x < 0 || head.x >= tileCount || head.y < 0 || head.y >= tileCount) {
+                 gameOver();
+                 return;
+            }
+
+            snake.unshift(head);
+            
+            if (head.x === food.x && head.y === food.y) {
+                score++;
+                scoreDisplay.textContent = score;
+                placeFood(); 
+            } else {
+                snake.pop();
             }
             
-            show(title, message, type = 'info', duration = 5000) {
-                const notification = this.createNotification(title, message, type);
-                this.container.appendChild(notification);
-                
-                // إظهار الإشعار
-                setTimeout(() => {
-                    notification.style.animation = 'notificationSlide 0.5s forwards';
-                }, 10);
-                
-                // إغلاق تلقائي
-                const autoClose = setTimeout(() => {
-                    this.closeNotification(notification);
-                }, duration);
-                
-                // إضافة زر الإغلاق
-                const closeBtn = notification.querySelector('.notification-close');
-                closeBtn.addEventListener('click', () => {
-                    clearTimeout(autoClose);
-                    this.closeNotification(notification);
-                });
-                
-                this.notificationCount++;
-                return notification;
-            }
-            
-            createNotification(title, message, type) {
-                const icons = {
-                    success: 'check-circle',
-                    warning: 'exclamation-triangle',
-                    error: 'times-circle',
-                    info: 'info-circle'
-                };
-                
-                const notification = document.createElement('div');
-                notification.className = `notification ${type}`;
-                notification.innerHTML = `
-                    <div class="notification-icon">
-                        <i class="fas fa-${icons[type]}"></i>
-                    </div>
-                    <div class="notification-content">
-                        <strong>${title}</strong>
-                        <p>${message}</p>
-                    </div>
-                    <button class="notification-close">
-                        <i class="fas fa-times"></i>
-                    </button>
-                `;
-                
-                return notification;
-            }
-            
-            closeNotification(notification) {
-                notification.style.transform = 'translateX(500px)';
-                setTimeout(() => {
-                    if (notification.parentNode) {
-                        notification.parentNode.removeChild(notification);
-                    }
-                }, 500);
-            }
+            draw();
         }
 
-        class AnimationManager {
-            constructor() {
-                this.confettiContainer = document.getElementById('confettiContainer');
-            }
+        function draw() {
+            ctx.fillStyle = '#2e3a45';
+            ctx.fillRect(0, 0, FIXED_WIDTH, FIXED_WIDTH);
             
-            createRipple(element, color = 'rgba(33, 150, 243, 0.4)') {
-                const ripple = document.createElement('div');
-                ripple.className = 'ripple';
-                
-                const rect = element.getBoundingClientRect();
-                const size = Math.max(rect.width, rect.height);
-                
-                ripple.style.width = ripple.style.height = size + 'px';
-                ripple.style.left = (rect.left + rect.width/2 - size/2) + 'px';
-                ripple.style.top = (rect.top + rect.height/2 - size/2) + 'px';
-                ripple.style.backgroundColor = color;
-                
-                document.body.appendChild(ripple);
-                
-                setTimeout(() => {
-                    if (ripple.parentNode) ripple.parentNode.removeChild(ripple);
-                }, 600);
-            }
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize - 1, gridSize - 1);
             
-            createWaterEffect(x, y, parent) {
-                // إنشاء قطرات ماء
-                for (let i = 0; i < 5; i++) {
-                    setTimeout(() => {
-                        const drop = document.createElement('div');
-                        drop.className = 'water-drop';
-                        
-                        const size = 20 + Math.random() * 40;
-                        const offsetX = (Math.random() - 0.5) * 100;
-                        const offsetY = (Math.random() - 0.5) * 100;
-                        
-                        drop.style.width = drop.style.height = size + 'px';
-                        drop.style.left = (x - size/2 + offsetX) + 'px';
-                        drop.style.top = (y - size/2 + offsetY) + 'px';
-                        
-                        parent.appendChild(drop);
-                        
-                        // أنيميشن السقوط
-                        drop.animate([
-                            { opacity: 0, transform: 'scale(0) translateY(0)' },
-                            { opacity: 0.8, transform: 'scale(1) translateY(10px)' },
-                            { opacity: 0, transform: 'scale(1.5) translateY(30px)' }
-                        ], {
-                            duration: 1000,
-                            easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
-                        });
-                        
-                        // إزالة بعد الانتهاء
-                        setTimeout(() => {
-                            if (drop.parentNode) drop.parentNode.removeChild(drop);
-                        }, 1000);
-                    }, i * 150);
-                }
-                
-                // إنشاء تموجات
-                const ripple = document.createElement('div');
-                ripple.className = 'water-ripple';
-                ripple.style.left = (x - 50) + 'px';
-                ripple.style.top = (y - 50) + 'px';
-                
-                parent.appendChild(ripple);
-                
-                setTimeout(() => {
-                    if (ripple.parentNode) ripple.parentNode.removeChild(ripple);
-                }, 1000);
-            }
-            
-            createConfetti(count = 100) {
-                const colors = ['#2196f3', '#4caf50', '#ff9800', '#f44336', '#9c27b0', '#00bcd4'];
-                
-                for (let i = 0; i < count; i++) {
-                    const confetti = document.createElement('div');
-                    confetti.className = 'confetti';
-                    
-                    const color = colors[Math.floor(Math.random() * colors.length)];
-                    const size = 10 + Math.random() * 20;
-                    const left = Math.random() * 100;
-                    const duration = 2 + Math.random() * 2;
-                    const delay = Math.random() * 2;
-                    
-                    confetti.style.width = confetti.style.height = size + 'px';
-                    confetti.style.backgroundColor = color;
-                    confetti.style.left = left + 'vw';
-                    confetti.style.animation = `confettiFall ${duration}s linear ${delay}s forwards`;
-                    
-                    this.confettiContainer.appendChild(confetti);
-                    
-                    // إزالة بعد الانتهاء
-                    setTimeout(() => {
-                        if (confetti.parentNode) confetti.parentNode.removeChild(confetti);
-                    }, (duration + delay) * 1000);
-                }
-            }
-            
-            vibrateElement(element, intensity = 5) {
-                const originalTransform = element.style.transform;
-                let count = 0;
-                const interval = setInterval(() => {
-                    const x = (Math.random() - 0.5) * intensity;
-                    const y = (Math.random() - 0.5) * intensity;
-                    element.style.transform = `translate(${x}px, ${y}px) ${originalTransform}`;
-                    
-                    count++;
-                    if (count >= 10) {
-                        clearInterval(interval);
-                        element.style.transform = originalTransform;
-                    }
-                }, 30);
-            }
-        }
-
-        // ==================== الفئة الرئيسية ====================
-        class PrayerSimulator {
-            constructor() {
-                this.audioManager = new AudioManager();
-                this.notificationManager = new NotificationManager();
-                this.animationManager = new AnimationManager();
-                
-                this.init();
-            }
-            
-            async init() {
-                try {
-                    // تحميل البيانات
-                    this.loadUserData();
-                    
-                    // تهيئة الواجهة
-                    this.renderWuduSteps();
-                    this.renderPrayerSteps();
-                    this.setupEventListeners();
-                    
-                    // بدء المؤقت
-                    this.startTimer();
-                    
-                    // تحديث التقدم
-                    this.updateProgress();
-                    this.updateAzkar();
-                    
-                    // إخفاء شاشة التحميل
-                    setTimeout(() => {
-                        document.getElementById('loadingOverlay').style.opacity = '0';
-                        setTimeout(() => {
-                            document.getElementById('loadingOverlay').style.display = 'none';
-                            document.getElementById('appContainer').style.display = 'block';
-                            
-                            // إظهار رسالة ترحيب
-                            this.notificationManager.show(
-                                'مرحباً بك!',
-                                'ابدأ رحلة تعلم الوضوء والصلاة بالمحاكاة التفاعلية',
-                                'success'
-                            );
-                        }, 500);
-                    }, 1500);
-                    
-                } catch (error) {
-                    console.error('Error initializing app:', error);
-                    this.notificationManager.show('خطأ', 'حدث خطأ في تحميل التطبيق', 'error');
-                }
-            }
-            
-            // =============== إدارة البيانات ===============
-            loadUserData() {
-                try {
-                    const saved = localStorage.getItem('prayerSimulatorData');
-                    if (saved) {
-                        const data = JSON.parse(saved);
-                        
-                        AppState.completedSteps = new Set(data.completedSteps || []);
-                        AppState.totalScore = data.totalScore || 0;
-                        AppState.streakDays = data.streakDays || 0;
-                        AppState.currentStep = data.currentStep || 0;
-                        
-                        // تحديث الواجهة
-                        this.updateTotalScore();
-                    }
-                } catch (error) {
-                    console.error('Error loading user data:', error);
-                }
-            }
-            
-            saveUserData() {
-                try {
-                    const data = {
-                        completedSteps: Array.from(AppState.completedSteps),
-                        totalScore: AppState.totalScore,
-                        streakDays: AppState.streakDays,
-                        currentStep: AppState.currentStep,
-                        lastSave: new Date().toISOString()
-                    };
-                    
-                    localStorage.setItem('prayerSimulatorData', JSON.stringify(data));
-                } catch (error) {
-                    console.error('Error saving user data:', error);
-                }
-            }
-            
-            // =============== عرض البيانات ===============
-            renderWuduSteps() {
-                const container = document.getElementById('stepsScroll');
-                container.innerHTML = '';
-                
-                APP_DATA.wuduSteps.forEach((step, index) => {
-                    const stepEl = this.createStepElement(step, index);
-                    container.appendChild(stepEl);
-                });
-                
-                this.updateCurrentStepInfo();
-            }
-            
-            createStepElement(step, index) {
-                const div = document.createElement('div');
-                div.className = `step-card ${index === AppState.currentStep ? 'active' : ''} 
-                               ${AppState.completedSteps.has(step.id) ? 'completed' : ''}`;
-                
-                div.innerHTML = `
-                    <div class="step-number">${step.id}</div>
-                    <div class="step-time">${step.duration} ث</div>
-                    <h4>${step.title}</h4>
-                    <p style="margin-top: 8px; color: #666; line-height: 1.6;">${step.description}</p>
-                    ${step.parts.length > 0 ? `
-                        <div style="margin-top: 12px; font-size: 0.9em; color: #2196f3;">
-                            <i class="fas fa-hand-point-up"></i> 
-                            ${step.parts.map(part => APP_DATA.bodyParts[part]).join('، ')}
-                        </div>
-                    ` : ''}
-                    <div style="margin-top: 12px; padding: 10px; background: rgba(33, 150, 243, 0.1); 
-                         border-radius: 12px; font-size: 0.85em; color: #555;">
-                        <i class="fas fa-lightbulb"></i> ${step.details}
-                    </div>
-                `;
-                
-                div.addEventListener('click', () => this.setCurrentStep(index));
-                this.addRippleEffect(div);
-                
-                return div;
-            }
-            
-            renderPrayerSteps() {
-                const container = document.getElementById('prayerGrid');
-                container.innerHTML = '';
-                
-                APP_DATA.prayerSteps.forEach((step, index) => {
-                    const stepEl = this.createPrayerStepElement(step, index);
-                    container.appendChild(stepEl);
-                });
-            }
-            
-            createPrayerStepElement(step, index) {
-                const div = document.createElement('div');
-                div.className = 'prayer-step-card';
-                div.dataset.position = step.position;
-                
-                div.innerHTML = `
-                    <span class="prayer-icon">${step.icon}</span>
-                    <h4>${step.name}</h4>
-                    <div class="prayer-duration">${step.duration} ث</div>
-                `;
-                
-                div.addEventListener('click', () => {
-                    if (AppState.prayerInProgress) {
-                        this.setPrayerStep(index);
-                    } else {
-                        this.showPrayerAnimation(step);
-                    }
-                });
-                
-                this.addRippleEffect(div);
-                return div;
-            }
-            
-            // =============== إدارة الخطوات ===============
-            setCurrentStep(index) {
-                if (AppState.isPrayerMode) return;
-                
-                AppState.currentStep = index;
-                this.updateUI();
-                this.highlightBodyParts();
-                this.startStepTimer();
-                
-                const step = APP_DATA.wuduSteps[AppState.currentStep];
-                this.notificationManager.show(step.title, step.description, 'info');
-                
-                // تشغيل الصوت إذا كان متوفراً
-                if (step.audio) {
-                    this.audioManager.play(step.audio);
-                }
-            }
-            
-            nextStep() {
-                if (AppState.currentStep < APP_DATA.wuduSteps.length - 1) {
-                    this.markStepAsCompleted(APP_DATA.wuduSteps[AppState.currentStep].id);
-                    this.setCurrentStep(AppState.currentStep + 1);
-                }
-            }
-            
-            prevStep() {
-                if (AppState.currentStep > 0) {
-                    this.setCurrentStep(AppState.currentStep - 1);
-                }
-            }
-            
-            markStepAsCompleted(stepId) {
-                if (!AppState.completedSteps.has(stepId)) {
-                    AppState.completedSteps.add(stepId);
-                    AppState.totalScore += 10;
-                    
-                    this.updateProgress();
-                    this.updateStepCards();
-                    this.updateTotalScore();
-                    
-                    // إظهار الكونفيتي للخطوات المهمة
-                    if (stepId === 3 || stepId === 7 || stepId === 10) {
-                        this.animationManager.createConfetti(30);
-                    }
-                    
-                    // حفظ البيانات
-                    this.saveUserData();
-                }
-            }
-            
-            completeWudu() {
-                // إكمال جميع الخطوات
-                APP_DATA.wuduSteps.forEach(step => {
-                    AppState.completedSteps.add(step.id);
-                });
-                
-                AppState.isWuduCompleted = true;
-                AppState.totalScore += 50;
-                
-                this.updateProgress();
-                this.updateStepCards();
-                this.updateUI();
-                this.updateTotalScore();
-                
-                // إشعار النجاح
-                this.notificationManager.show(
-                    'مبروك!',
-                    'أتممت الوضوء بنجاح ✓ يمكنك الآن بدء الصلاة',
-                    'success'
-                );
-                
-                // مؤثرات خاصة
-                this.audioManager.play('takbir');
-                this.animationManager.createConfetti(100);
-                
-                // حفظ البيانات
-                this.saveUserData();
-            }
-            
-            // =============== الصلاة ===============
-            startPrayer() {
-                if (!AppState.isWuduCompleted) {
-                    this.notificationManager.show(
-                        'تنبيه',
-                        'أكمل الوضوء أولاً قبل الصلاة',
-                        'warning'
-                    );
-                    return;
-                }
-                
-                AppState.isPrayerMode = true;
-                AppState.prayerInProgress = true;
-                AppState.currentPrayerStep = 0;
-                
-                // تحديث الواجهة
-                this.updatePrayerControls();
-                this.hideBodyParts();
-                
-                // بدء تسلسل الصلاة
-                this.startPrayerSequence();
-                
-                this.notificationManager.show(
-                    'بدأت الصلاة',
-                    'تابع حركات الصلاة بالتسلسل',
-                    'info'
-                );
-            }
-            
-            startPrayerSequence() {
-                if (!AppState.prayerInProgress) return;
-                
-                const step = APP_DATA.prayerSteps[AppState.currentPrayerStep];
-                
-                // تحديث خطوة الصلاة النشطة
-                this.updatePrayerStepCards();
-                
-                // عرض الأنيميشن
-                this.showPrayerAnimation(step);
-                
-                // الانتقال للخطوة التالية
-                setTimeout(() => {
-                    AppState.currentPrayerStep++;
-                    if (AppState.currentPrayerStep >= APP_DATA.prayerSteps.length) {
-                        this.completePrayer();
-                    } else {
-                        this.startPrayerSequence();
-                    }
-                }, step.duration * 1000);
-            }
-            
-            completePrayer() {
-                AppState.prayerInProgress = false;
-                AppState.isPrayerMode = false;
-                AppState.totalScore += 100;
-                
-                // إعادة تعيين واجهة المستخدم
-                this.updatePrayerControls();
-                this.showBodyParts();
-                
-                // إشعار النجاح
-                this.notificationManager.show(
-                    'مبارك!',
-                    'أتممت الصلاة بنجاح 🎉 تقبل الله منك',
-                    'success'
-                );
-                
-                // مؤثرات خاصة
-                this.audioManager.play('success');
-                this.animationManager.createConfetti(150);
-                
-                // تحديث البيانات
-                this.updateTotalScore();
-                this.saveUserData();
-            }
-            
-            showPrayerAnimation(step) {
-                const overlay = document.getElementById('prayerAnimationOverlay');
-                const figure = document.getElementById('prayerFigure');
-                const title = document.getElementById('prayerAnimationTitle');
-                
-                // تحديث وضعية الصلاة
-                let height, top;
-                switch(step.position) {
-                    case 'standing':
-                        height = '250px';
-                        top = '50%';
-                        break;
-                    case 'bowing':
-                        height = '180px';
-                        top = '55%';
-                        break;
-                    case 'prostration':
-                        height = '100px';
-                        top = '70%';
-                        break;
-                    case 'sitting':
-                        height = '150px';
-                        top = '60%';
-                        break;
-                }
-                
-                figure.style.height = height;
-                figure.style.top = top;
-                
-                // تحديث العنوان
-                title.textContent = step.name;
-                
-                // إظهار الأنيميشن
-                overlay.style.display = 'flex';
-                
-                // إغلاق تلقائي
-                if (!AppState.isPracticeMode) {
-                    setTimeout(() => {
-                        if (overlay.style.display === 'flex') {
-                            overlay.style.display = 'none';
-                        }
-                    }, 3000);
-                }
-            }
-            
-            // =============== تحديث الواجهة ===============
-            updateUI() {
-                this.updateStepCards();
-                this.updateCurrentStepInfo();
-                this.updateControlButtons();
-            }
-            
-            updateStepCards() {
-                document.querySelectorAll('.step-card').forEach((card, index) => {
-                    card.classList.remove('active', 'completed');
-                    if (index === AppState.currentStep) card.classList.add('active');
-                    if (AppState.completedSteps.has(APP_DATA.wuduSteps[index].id)) card.classList.add('completed');
-                });
-            }
-            
-            updateCurrentStepInfo() {
-                const step = APP_DATA.wuduSteps[AppState.currentStep];
-                const completedCount = AppState.completedSteps.size;
-                
-                document.getElementById('currentStepTitle').textContent = `الخطوة ${step.id}: ${step.title}`;
-                document.getElementById('currentStepDescription').textContent = step.description;
-                document.getElementById('stepProgress').textContent = `${step.id}/${APP_DATA.wuduSteps.length}`;
-                document.getElementById('completedCount').textContent = completedCount;
-            }
-            
-            updateControlButtons() {
-                document.getElementById('prevStepBtn').disabled = AppState.currentStep === 0;
-                document.getElementById('nextStepBtn').disabled = AppState.currentStep === APP_DATA.wuduSteps.length - 1;
-                document.getElementById('completeWuduBtn').disabled = AppState.isWuduCompleted;
-                document.getElementById('startPrayerBtn').disabled = !AppState.isWuduCompleted || AppState.isPrayerMode;
-            }
-            
-            updatePrayerStepCards() {
-                document.querySelectorAll('.prayer-step-card').forEach((card, index) => {
-                    card.classList.remove('active');
-                    if (index === AppState.currentPrayerStep) card.classList.add('active');
-                });
-            }
-            
-            updatePrayerControls() {
-                const startBtn = document.getElementById('startPrayerBtn');
-                if (AppState.prayerInProgress) {
-                    startBtn.innerHTML = '<i class="fas fa-pause-circle"></i> إيقاف الصلاة';
-                    startBtn.onclick = () => this.stopPrayer();
-                } else {
-                    startBtn.innerHTML = '<i class="fas fa-play-circle"></i> بدء الصلاة';
-                    startBtn.onclick = () => this.startPrayer();
-                }
-            }
-            
-            // =============== أجزاء الجسم ===============
-            highlightBodyParts() {
-                // إزالة التمييز السابق
-                document.querySelectorAll('.body-part-3d').forEach(part => {
-                    part.classList.remove('highlight');
-                });
-                
-                // تمييز الأجزاء الجديدة
-                const currentParts = APP_DATA.wuduSteps[AppState.currentStep].parts;
-                currentParts.forEach(part => {
-                    const partEl = document.querySelector(`.body-part-3d[data-part="${part}"]`);
-                    if (partEl) {
-                        partEl.classList.add('highlight');
-                        this.animationManager.createRipple(partEl);
-                    }
-                });
-            }
-            
-            hideBodyParts() {
-                document.querySelectorAll('.body-part-3d').forEach(part => {
-                    part.style.opacity = '0.3';
-                });
-            }
-            
-            showBodyParts() {
-                document.querySelectorAll('.body-part-3d').forEach(part => {
-                    part.style.opacity = '1';
-                });
-            }
-            
-            handleBodyPartClick(event) {
-                if (AppState.isPrayerMode) return;
-                
-                const part = event.currentTarget.dataset.part;
-                const currentParts = APP_DATA.wuduSteps[AppState.currentStep].parts;
-                
-                if (currentParts.includes(part)) {
-                    // مؤثرات بصرية
-                    const rect = event.currentTarget.getBoundingClientRect();
-                    const x = rect.left + rect.width / 2;
-                    const y = rect.top + rect.height / 2;
-                    
-                    this.animationManager.createWaterEffect(x, y, document.getElementById('waterEffects'));
-                    this.animationManager.vibrateElement(event.currentTarget);
-                    
-                    // صوت الماء
-                    this.audioManager.play('water');
-                    
-                    // إكمال الخطوة
-                    this.markStepAsCompleted(APP_DATA.wuduSteps[AppState.currentStep].id);
-                }
-            }
-            
-            // =============== المؤقتات ===============
-            startTimer() {
-                AppState.startTime = Date.now();
-                AppState.timerInterval = setInterval(() => this.updateTimer(), 1000);
-            }
-            
-            updateTimer() {
-                AppState.elapsedTime = Math.floor((Date.now() - AppState.startTime) / 1000);
-                const minutes = Math.floor(AppState.elapsedTime / 60).toString().padStart(2, '0');
-                const seconds = (AppState.elapsedTime % 60).toString().padStart(2, '0');
-                document.getElementById('timerDisplay').textContent = `${minutes}:${seconds}`;
-            }
-            
-            pauseTimer() {
-                if (AppState.timerInterval) {
-                    clearInterval(AppState.timerInterval);
-                    AppState.timerInterval = null;
-                    document.getElementById('pauseTimerBtn').innerHTML = '<i class="fas fa-play"></i> استئناف';
-                } else {
-                    this.startTimer();
-                    document.getElementById('pauseTimerBtn').innerHTML = '<i class="fas fa-pause"></i> إيقاف';
-                }
-            }
-            
-            resetTimer() {
-                AppState.startTime = Date.now();
-                AppState.elapsedTime = 0;
-                this.updateTimer();
-            }
-            
-            startStepTimer() {
-                // إيقاف المؤقت السابق
-                if (AppState.stepTimer) {
-                    clearInterval(AppState.stepTimer);
-                }
-                
-                const step = APP_DATA.wuduSteps[AppState.currentStep];
-                let timeLeft = step.duration;
-                
-                document.getElementById('timeRemaining').textContent = timeLeft;
-                
-                AppState.stepTimer = setInterval(() => {
-                    timeLeft--;
-                    document.getElementById('timeRemaining').textContent = timeLeft;
-                    
-                    if (timeLeft <= 0) {
-                        clearInterval(AppState.stepTimer);
-                        if (AppState.currentStep < APP_DATA.wuduSteps.length - 1) {
-                            this.nextStep();
-                        }
-                    }
-                }, 1000);
-            }
-            
-            // =============== التقدم ===============
-            updateProgress() {
-                const progress = (AppState.completedSteps.size / APP_DATA.wuduSteps.length) * 100;
-                const circle = document.getElementById('progressRing');
-                const offset = 565 - (progress / 100) * 565;
-                
-                circle.style.strokeDashoffset = offset;
-                document.getElementById('progressText').textContent = `${Math.round(progress)}%`;
-                document.getElementById('progressDetails').textContent = 
-                    `${AppState.completedSteps.size} من ${APP_DATA.wuduSteps.length} خطوة مكتملة`;
-            }
-            
-            updateTotalScore() {
-                document.getElementById('totalScore').textContent = AppState.totalScore;
-            }
-            
-            resetProgress() {
-                if (confirm("هل تريد إعادة تعيين التقدم؟ سيتم حذف جميع إنجازاتك.")) {
-                    AppState.completedSteps.clear();
-                    AppState.currentStep = 0;
-                    AppState.totalScore = 0;
-                    AppState.isWuduCompleted = false;
-                    
-                    this.updateProgress();
-                    this.updateUI();
-                    this.updateTotalScore();
-                    this.saveUserData();
-                    
-                    this.notificationManager.show(
-                        "تم إعادة التعيين",
-                        "يمكنك البدء من جديد",
-                        "info"
-                    );
-                }
-            }
-            
-            // =============== الأذكار ===============
-            updateAzkar() {
-                document.getElementById('azkarText').textContent = APP_DATA.azkarList[AppState.currentAzkarIndex];
-            }
-            
-            nextAzkar() {
-                AppState.currentAzkarIndex = (AppState.currentAzkarIndex + 1) % APP_DATA.azkarList.length;
-                this.updateAzkar();
-                
-                this.notificationManager.show(
-                    "ذكر جديد",
-                    APP_DATA.azkarList[AppState.currentAzkarIndex],
-                    "info"
-                );
-            }
-            
-            repeatAzkar() {
-                this.notificationManager.show(
-                    "تكرار الذكر",
-                    APP_DATA.azkarList[AppState.currentAzkarIndex],
-                    "info"
-                );
-            }
-            
-            // =============== إعداد المستمعين ===============
-            setupEventListeners() {
-                // أزرار التنقل
-                document.getElementById('prevStepBtn').addEventListener('click', () => this.prevStep());
-                document.getElementById('nextStepBtn').addEventListener('click', () => this.nextStep());
-                document.getElementById('completeWuduBtn').addEventListener('click', () => this.completeWudu());
-                document.getElementById('startPrayerBtn').addEventListener('click', () => this.startPrayer());
-                
-                // أزرار الصلاة
-                document.getElementById('autoPrayerBtn').addEventListener('click', () => this.startAutoPrayer());
-                document.getElementById('practiceModeBtn').addEventListener('click', () => this.togglePracticeMode());
-                document.getElementById('resetPrayerBtn').addEventListener('click', () => this.resetPrayer());
-                document.getElementById('closePrayerAnimationBtn').addEventListener('click', () => this.hidePrayerAnimation());
-                
-                // المؤقتات
-                document.getElementById('pauseTimerBtn').addEventListener('click', () => this.pauseTimer());
-                document.getElementById('resetTimerBtn').addEventListener('click', () => this.resetTimer());
-                
-                // التقدم
-                document.getElementById('resetProgressBtn').addEventListener('click', () => this.resetProgress());
-                
-                // الأذكار
-                document.getElementById('nextZikrBtn').addEventListener('click', () => this.nextAzkar());
-                document.getElementById('repeatZikrBtn').addEventListener('click', () => this.repeatAzkar());
-                
-                // التحكم
-                document.getElementById('soundToggle').addEventListener('click', () => this.toggleSound());
-                document.getElementById('helpToggle').addEventListener('click', () => this.showHelp());
-                document.getElementById('darkModeToggle').addEventListener('click', () => this.toggleDarkMode());
-                document.getElementById('fullscreenToggle').addEventListener('click', () => this.toggleFullscreen());
-                
-                // التبويب
-                document.querySelectorAll('.tab').forEach(tab => {
-                    tab.addEventListener('click', (e) => this.switchTab(e.currentTarget.dataset.tab));
-                });
-                
-                // أجزاء الجسم
-                document.querySelectorAll('.body-part-3d').forEach(part => {
-                    part.addEventListener('click', (e) => this.handleBodyPartClick(e));
-                    part.addEventListener('mouseenter', (e) => this.onBodyPartHover(e, true));
-                    part.addEventListener('mouseleave', (e) => this.onBodyPartHover(e, false));
-                });
-                
-                // الأحداث العامة
-                document.addEventListener('keydown', (e) => this.handleKeydown(e));
-                window.addEventListener('beforeunload', () => this.saveUserData());
-            }
-            
-            // =============== الميزات الإضافية ===============
-            startAutoPrayer() {
-                this.notificationManager.show(
-                    "الصلاة التلقائية",
-                    "سأقوم بتوجيهك خلال الصلاة خطوة بخطوة",
-                    "info"
-                );
-                
-                // إعادة تعيين
-                AppState.currentPrayerStep = 0;
-                AppState.prayerInProgress = true;
-                
-                // بدء التسلسل
-                this.startPrayerSequence();
-            }
-            
-            stopPrayer() {
-                AppState.prayerInProgress = false;
-                this.updatePrayerControls();
-                this.showBodyParts();
-                
-                this.notificationManager.show(
-                    "توقفت الصلاة",
-                    "يمكنك استئناف الصلاة أو البدء من جديد",
-                    "warning"
-                );
-            }
-            
-            resetPrayer() {
-                AppState.prayerInProgress = false;
-                AppState.isPrayerMode = false;
-                AppState.currentPrayerStep = 0;
-                
-                this.updatePrayerControls();
-                this.updatePrayerStepCards();
-                this.showBodyParts();
-                
-                this.notificationManager.show(
-                    "تم إعادة تعيين الصلاة",
-                    "يمكنك البدء من جديد",
-                    "info"
-                );
-            }
-            
-            togglePracticeMode() {
-                AppState.isPracticeMode = !AppState.isPracticeMode;
-                const btn = document.getElementById('practiceModeBtn');
-                
-                if (AppState.isPracticeMode) {
-                    btn.innerHTML = '<i class="fas fa-user-graduate"></i> وضع التدريب (نشط)';
-                    btn.classList.add('active');
-                    
-                    this.notificationManager.show(
-                        "وضع التدريب",
-                        "يمكنك الآن ممارسة الصلاة بدون توقيت",
-                        "info"
-                    );
-                } else {
-                    btn.innerHTML = '<i class="fas fa-graduation-cap"></i> وضع التدريب';
-                    btn.classList.remove('active');
-                }
-            }
-            
-            hidePrayerAnimation() {
-                document.getElementById('prayerAnimationOverlay').style.display = 'none';
-            }
-            
-            toggleSound() {
-                AppState.isSoundEnabled = !AppState.isSoundEnabled;
-                const btn = document.getElementById('soundToggle');
-                btn.classList.toggle('active');
-                btn.innerHTML = `<i class="fas fa-volume-${AppState.isSoundEnabled ? 'up' : 'mute'}"></i>`;
-                
-                this.notificationManager.show(
-                    AppState.isSoundEnabled ? "الصوت مفعل" : "الصوت معطل",
-                    AppState.isSoundEnabled ? "يمكنك الآن سماع المؤثرات الصوتية" : "تم إيقاف المؤثرات الصوتية",
-                    AppState.isSoundEnabled ? "success" : "warning"
-                );
-            }
-            
-            showHelp() {
-                this.notificationManager.show(
-                    "كيفية الاستخدام",
-                    `
-                    1. ابدأ بخطوات الوضوء بالترتيب
-                    2. انقر على أجزاء الجسم المضيئة
-                    3. أكمل الوضوء ثم انتقل للصلاة
-                    4. استخدم وضع التدريب للممارسة
-                    `,
-                    "info",
-                    8000
-                );
-            }
-            
-            toggleDarkMode() {
-                AppState.isDarkMode = !AppState.isDarkMode;
-                const btn = document.getElementById('darkModeToggle');
-                btn.classList.toggle('active');
-                
-                if (AppState.isDarkMode) {
-                    document.documentElement.style.setProperty('--bg-gradient', 'linear-gradient(135deg, #121212 0%, #1e1e1e 100%)');
-                    document.documentElement.style.setProperty('--light', '#2d2d2d');
-                    document.documentElement.style.setProperty('--text', '#ffffff');
-                    document.documentElement.style.setProperty('--text-light', '#aaaaaa');
-                } else {
-                    document.documentElement.style.setProperty('--bg-gradient', 'linear-gradient(135deg, #0d47a1 0%, #1976d2 100%)');
-                    document.documentElement.style.setProperty('--light', '#f5f7fa');
-                    document.documentElement.style.setProperty('--text', '#2c3e50');
-                    document.documentElement.style.setProperty('--text-light', '#7f8c8d');
-                }
-            }
-            
-            toggleFullscreen() {
-                if (!document.fullscreenElement) {
-                    document.documentElement.requestFullscreen().catch(err => {
-                        console.log(`Error attempting to enable fullscreen: ${err.message}`);
-                    });
-                    AppState.isFullscreen = true;
-                } else {
-                    if (document.exitFullscreen) {
-                        document.exitFullscreen();
-                        AppState.isFullscreen = false;
-                    }
-                }
-                document.getElementById('fullscreenToggle').classList.toggle('active');
-            }
-            
-            switchTab(tabName) {
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                event.currentTarget.classList.add('active');
-                
-                document.getElementById('stepsScroll').style.display = tabName === 'wudu' ? 'block' : 'none';
-                document.getElementById('azkarPanel').style.display = tabName === 'azkar' ? 'block' : 'none';
-                
-                if (tabName === 'prayer') {
-                    this.notificationManager.show(
-                        "حركات الصلاة",
-                        "انقر على أي حركة لعرضها في المحاكاة ثلاثية الأبعاد",
-                        "info"
-                    );
-                }
-            }
-            
-            // =============== أدوات مساعدة ===============
-            addRippleEffect(element) {
-                element.addEventListener('click', function(e) {
-                    const ripple = document.createElement('div');
-                    ripple.className = 'ripple';
-                    
-                    const rect = this.getBoundingClientRect();
-                    const size = Math.max(rect.width, rect.height);
-                    
-                    ripple.style.width = ripple.style.height = size + 'px';
-                    ripple.style.left = (e.clientX - rect.left - size/2) + 'px';
-                    ripple.style.top = (e.clientY - rect.top - size/2) + 'px';
-                    
-                    this.appendChild(ripple);
-                    
-                    setTimeout(() => {
-                        if (ripple.parentNode) ripple.parentNode.removeChild(ripple);
-                    }, 600);
-                });
-            }
-            
-            onBodyPartHover(event, isEnter) {
-                const part = event.currentTarget;
-                if (isEnter) {
-                    part.style.transform = 'scale(1.1) translateZ(20px)';
-                    part.style.zIndex = '10';
-                } else {
-                    part.style.transform = 'scale(1) translateZ(0)';
-                    part.style.zIndex = '';
-                }
-            }
-            
-            handleKeydown(event) {
-                switch(event.key) {
-                    case 'ArrowRight':
-                        if (!event.ctrlKey) this.prevStep();
-                        break;
-                    case 'ArrowLeft':
-                        if (!event.ctrlKey) this.nextStep();
-                        break;
-                    case ' ':
-                        event.preventDefault();
-                        if (AppState.isPrayerMode) {
-                            this.stopPrayer();
-                        } else {
-                            this.startPrayer();
-                        }
-                        break;
-                    case 'Escape':
-                        this.hidePrayerAnimation();
-                        break;
-                }
-            }
-            
-            setPrayerStep(index) {
-                if (!AppState.prayerInProgress) return;
-                AppState.currentPrayerStep = index;
-                this.updatePrayerStepCards();
-            }
-        }
-
-        // ==================== بدء التطبيق ====================
-        // التحقق من دعم المتصفح
-        if (!('AudioContext' in window || 'webkitAudioContext' in window)) {
-            alert('عذراً، المتصفح الخاص بك لا يدعم الميزات الصوتية المطلوبة. يرجى استخدام متصفح حديث.');
-        }
-
-        // بدء التطبيق عند تحميل الصفحة
-        window.addEventListener('DOMContentLoaded', () => {
-            window.prayerSimulator = new PrayerSimulator();
-        });
-
-        // إضافة خدمة العامل
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js').catch(error => {
-                    console.log('Service Worker registration failed:', error);
-                });
+            ctx.fillStyle = '#00ff00';
+            snake.forEach(segment => {
+                ctx.fillRect(segment.x * gridSize, segment.y * gridSize, gridSize - 1, gridSize - 1);
             });
         }
+
+        function placeFood() {
+            let newFoodPosition;
+            do {
+                newFoodPosition = {
+                    x: Math.floor(Math.random() * tileCount),
+                    y: Math.floor(Math.random() * tileCount)
+                };
+            } while (isFoodOnSnake(newFoodPosition));
+            
+            food = newFoodPosition;
+        }
+
+        function isFoodOnSnake(pos) {
+            return snake.some(segment => segment.x === pos.x && segment.y === pos.y);
+        }
+
+        function checkCollision() {
+            const head = snake[0];
+            for (let i = 1; i < snake.length; i++) {
+                if (head.x === snake[i].x && head.y === snake[i].y) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // --- Game Over & Viral Sharing Logic ---
+
+        function handleShareScore() {
+            // FUTURE: In a real app, this converts the canvas to an image and uploads it.
+            const shareText = `I just scored ${score} in the Classic Snake.AI game! Can you beat my score? Play now! [Your Game Link] #SnakeAI #ViralChallenge`;
+            
+            // Mock sharing action for web browser
+            if (navigator.share) {
+                // Uses the native mobile share dialog
+                navigator.share({
+                    title: 'Snake.AI High Score',
+                    text: shareText,
+                    url: window.location.href,
+                }).catch(error => console.log('Error sharing', error));
+            } else {
+                // Fallback for desktop/browsers without native sharing
+                alert("Share this: " + shareText);
+            }
+        }
+
+        function gameOver() {
+            clearInterval(gameLoopInterval);
+            finalScoreDisplay.textContent = score;
+            
+            // Set the viral message based on score for high engagement
+            if (score > 15) {
+                viralMessage.textContent = "Incredible run! Only a few people reach that score. Share your triumph!";
+            } else if (score > 5) {
+                viralMessage.textContent = "Solid score! Challenge your friends to beat it.";
+            } else {
+                 viralMessage.textContent = "Nice try! Play again or share your attempt.";
+            }
+            
+            gameOverScreen.classList.remove('hidden');
+        }
+
+        // --- Input Handling ---
+
+        // 1. Keyboard Input
+        document.addEventListener('keydown', e => {
+            if ((e.key === 'ArrowUp' || e.key === 'w') && velocity.y === 0) {
+                nextVelocity = { x: 0, y: -1 };
+            } else if ((e.key === 'ArrowDown' || e.key === 's') && velocity.y === 0) {
+                nextVelocity = { x: 0, y: 1 };
+            } else if ((e.key === 'ArrowLeft' || e.key === 'a') && velocity.x === 0) {
+                nextVelocity = { x: -1, y: 0 };
+            } else if ((e.key === 'ArrowRight' || e.key === 'd') && velocity.x === 0) {
+                nextVelocity = { x: 1, y: 0 };
+            }
+        });
+
+        // 2. Touch Input
+        canvas.addEventListener('touchstart', e => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            e.preventDefault();
+        }, false);
+
+        canvas.addEventListener('touchend', e => {
+            if (e.changedTouches.length === 0) return;
+            
+            const touchEndX = e.changedTouches[0].clientX;
+            const touchEndY = e.changedTouches[0].clientY;
+
+            const dx = touchEndX - touchStartX;
+            const dy = touchEndY - touchStartY;
+
+            if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > SWIPE_THRESHOLD) {
+                // Horizontal swipe
+                if (dx > 0 && velocity.x === 0) {
+                    nextVelocity = { x: 1, y: 0 };
+                } else if (dx < 0 && velocity.x === 0) {
+                    nextVelocity = { x: -1, y: 0 };
+                }
+            } else if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > SWIPE_THRESHOLD) {
+                // Vertical swipe
+                if (dy > 0 && velocity.y === 0) {
+                    nextVelocity = { x: 0, y: 1 };
+                } else if (dy < 0 && velocity.y === 0) {
+                    nextVelocity = { x: 0, y: -1 };
+                }
+            }
+            e.preventDefault();
+        }, false);
+
+
+        // --- Initializer ---
+
+        retryButton.addEventListener('click', startGame);
+        shareButton.addEventListener('click', handleShareScore);
+
+        // Start the game immediately on load
+        startGame();
     </script>
 </body>
 </html>
